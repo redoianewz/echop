@@ -8,16 +8,28 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function Products({slidestoShow}) {
-  const [products, setProducts] = useState([]);
-  const [hoveredProducts, setHoveredProducts] = useState({});
-  const [selectedColor, setSelectedColor] = useState(null);
-  const [selectsize, setSelectsize] = useState(null);
-  const [selectedAttributes, setSelectedAttributes] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
+interface Product {
+  id: number;
+  name: string;
+  image: string;
+  images: string;
+  category_name: string;
+  regular_price: number;
+  sale_price: number;
+}
+interface Wishlist {
+  wishlist_id: number;
+  user_id: number;
+  items: any[];
+}
+export default function Products({slidestoShow}: {slidestoShow: number}) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [hoveredProducts, setHoveredProducts] = useState<{ [key: number]: boolean }>({}); 
+  const [cart, setCart] = useState<{ cart_id: number; items: any[] }[]>([]);
+  const [wishlist, setWishlist] = useState<Wishlist[]>([]);
   const [itemToDelete, setItemToDelete] = useState(null);
   
+
 
   const getShopignCart = () => {
     // Fetch the cart data and update the state
@@ -68,14 +80,14 @@ export default function Products({slidestoShow}) {
 
 
 
-  const handleProductHover = (productId: any) => {
+  const handleProductHover = (productId: number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: true,
     }));
   };
 
-  const handleProductLeave = (productId: any) => {
+  const handleProductLeave = (productId: number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: false,
@@ -87,7 +99,7 @@ export default function Products({slidestoShow}) {
   }, []);
 
 
-const addProductToCart = (productId,price) => {
+const addProductToCart = (productId:number,price:number) => {
   const requestBody = {
     productId,
     quantity: 1, 
@@ -110,7 +122,7 @@ const addProductToCart = (productId,price) => {
         console.error('Error:', error);
       });
   };
-  const addProductToWishlist = (productId,price) => {
+  const addProductToWishlist = (productId:number,price:number) => {
     const requestBody = {
       productId,
       quantity: 1, 
@@ -133,56 +145,64 @@ const addProductToCart = (productId,price) => {
           console.error('Error:', error);
         });
     };
-  const deleteProductFromWishlist = (idshopcartItem) => {
-    fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: 'yourUserId', // Replace with the actual user ID or identifier
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {       
-        getShopignWishlist();
-        window.location.reload();
-        // Refresh the shopping cart after deletion
-      })
-      .catch((error) => {
-        console.error('Error deleting product from cart:', error);
+    const deleteProductFromWishlist = (itemIds: number[]) => {
+      // Loop through each item ID and delete from the wishlist
+      itemIds.forEach((idshopcartItem) => {
+        fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: 'yourUserId', // Replace with the actual user ID or identifier
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then((data) => {
+            getShopignWishlist();
+            window.location.reload();
+            // Refresh the wishlist after deletion
+          })
+          .catch((error) => {
+            console.error('Error deleting product from wishlist:', error);
+          });
       });
-  };
-  const deleteProductFromCart = (idshopcartItem) => {
-    fetch(`http://localhost:5001/api/shoppingCart/${idshopcartItem}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: 'yourUserId', // Replace with the actual user ID or identifier
-      }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {       
-        getShopignCart();
-        window.location.reload();
-        // Refresh the shopping cart after deletion
-      })
-      .catch((error) => {
-        console.error('Error deleting product from cart:', error);
+    };
+    
+    const deleteProductFromCart = (itemIds: number[]) => {
+      // Loop through each item ID and delete from the cart
+      itemIds.forEach((itemId) => {
+        fetch(`http://localhost:5001/api/shoppingCart/${itemId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userId: 'yourUserId', // Replace with the actual user ID or identifier
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! Status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then((data) => {
+            getShopignCart();
+            window.location.reload();
+            // Refresh the shopping cart after deletion
+          })
+          .catch((error) => {
+            console.error('Error deleting product from cart:', error);
+          });
       });
-  };
+    };
+    
 
 
   
@@ -321,12 +341,12 @@ const addProductToCart = (productId,price) => {
                       return (
                         (isInWishlist ? (                          
                           <FontAwesomeIcon
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => deleteProductFromWishlist(wishlistItem.items.map((item) => item.item_id))}
-                            title='Remove from wishlist'
-                            icon={faHeart}                      
-                            className="text-black mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
-                            />                                           
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => deleteProductFromWishlist(wishlistItem.items.map((item) => item.item_id))}
+                          title='Remove from wishlist'
+                          icon={faHeart}
+                          className="text-black mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                        />                                         
                         ) : (
                           <Link href='#' key={wishlistItem.wishlist_id}>
                           <FontAwesomeIcon

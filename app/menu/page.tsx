@@ -7,12 +7,18 @@ import Link from 'next/link';
 
 
 // ... (previous imports)
+interface Category{
+  id: number;
+  name: string;
+  image: string;
+  description: string;
+}
 
 const PageDropdown = () => {
   const [popoverShow, setPopoverShow] = useState(false);
-  const btnRef = createRef();
-  const popoverRef = createRef();
-  const [category, setCategory] = useState([]);
+  const btnRef = createRef<HTMLButtonElement>();
+  const popoverRef = createRef<HTMLDivElement>();  
+  const [category, setCategory] = useState<Category[]>([]);
 
   const fetchCategory = () => {
     fetch("http://localhost:5001/api/categories")
@@ -26,12 +32,12 @@ const PageDropdown = () => {
     fetchCategory();
 
     // Add event listener to close popover on outside click
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event:MouseEvent) => {
       if (
         popoverRef.current &&
-        !popoverRef.current.contains(event.target) &&
+        !popoverRef.current.contains(event.target as Node) &&
         btnRef.current &&
-        !btnRef.current.contains(event.target)
+        !btnRef.current.contains(event.target as Node)
       ) {
         setPopoverShow(false);
       }
@@ -47,11 +53,14 @@ const PageDropdown = () => {
   }, []);
 
   const openPopover = () => {
-    createPopper(btnRef.current, popoverRef.current, {
-      placement: "bottom"
-    });
-    setPopoverShow(true);
+    if (btnRef.current && popoverRef.current) {
+      createPopper(btnRef.current, popoverRef.current, {
+        placement: "bottom"
+      });
+      setPopoverShow(true);
+    }
   };
+  
 
   const closePopover = () => {      
     setPopoverShow(false);

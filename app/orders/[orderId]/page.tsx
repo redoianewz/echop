@@ -4,9 +4,43 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTruck ,faMobileScreenButton,faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import { useUser } from '@clerk/nextjs';
 
-export default function OrdersPage({params: { orderId }}) {
+interface Order {
+  orderId: number;
+  created_at: string;
+  subtotal: number;
+  items: {
+    productId: number;
+    productName: string;
+    productImage: string;
+    productRegularPrice: number;
+    productSalePrice: number;
+    quantity: number;
+    subtotal: number;
+    attributes: {
+      name: string;
+      values: string[];
+    }[];
+  }[];
+  firstname: string;
+  lastname: string;
+  address: string;
+  city: string;
+  mobile: string;
+}
+
+export default function OrdersPage({params: { orderId }} : {params: { orderId: string}}) {
   const { user } = useUser();
-  const [orders, setOrders] = useState({});
+  const [orders, setOrders] = useState<Order>({
+    orderId: 0,
+    created_at: '',
+    subtotal: 0,
+    items: [],
+    firstname: '',
+    lastname: '',
+    address: '',
+    city: '',
+    mobile: '',
+  });
 
   useEffect(() => {
     const getOrders = async () => {
@@ -118,7 +152,7 @@ export default function OrdersPage({params: { orderId }}) {
       <div className="flex flex-col md:flex-row xl:flex-col justify-start items-stretch h-full w-full md:space-x-6 lg:space-x-8 xl:space-x-0">
         <div className="flex flex-col justify-start items-start flex-shrink-0">
           <div className="flex justify-center w-full md:justify-start items-center space-x-4 py-8 border-b border-gray-200">
-            <img src={user?.imageUrl} alt={user?.fullName} width={100} height={120} />
+          <img src={user?.imageUrl} alt='name' width={100} height={120} />
             <div className="flex justify-start items-start flex-col space-y-2">
               <p className="text-base dark:text-gray-800 font-semibold leading-4 text-left text-gray-800"> {orders.firstname}  {orders.lastname}</p>
               <p className="text-sm dark:text-gray-600 leading-5 text-gray-600">10 Previous Orders</p>

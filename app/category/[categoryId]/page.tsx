@@ -10,20 +10,29 @@ import Image from 'next/image';
 // ... (previous imports)
 
 // ... (previous imports)
+interface Product {
+  id: number;
+  name: string;
+  image: string;
+  images: string;
+  sale_price: string;
+  regular_price: string;
+  category_name: string;
+}
 
-export default function page({ params: { categoryId } }) {
-  const [products, setProducts] = useState([]);
-  const [hoveredProducts, setHoveredProducts] = useState({});
+export default function page({ params: { categoryId }} : { params: { categoryId: string } }) {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [hoveredProducts, setHoveredProducts] = useState<{ [key: number]: boolean }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
   const getDataCategory = () => {
     fetch(`http://localhost:5001/api/categories/${categoryId}`)
       .then((res) => res.json())
-      .then((data) => {
+      .then((data:Product[]) => {
         setProducts(data);
         // Initialize hover state for each product
-        const initialHoverState = data.reduce((acc, product) => {
+        const initialHoverState = data.reduce((acc :any, product) => {
           acc[product.id] = false;
           return acc;
         }, {});
@@ -41,14 +50,14 @@ export default function page({ params: { categoryId } }) {
     }
   }, [categoryId]);
 
-  const handleProductHover = (productId) => {
+  const handleProductHover = (productId:number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: true,
     }));
   };
 
-  const handleProductLeave = (productId) => {
+  const handleProductLeave = (productId:number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: false,
@@ -57,7 +66,7 @@ export default function page({ params: { categoryId } }) {
 
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page:number) => {
     setCurrentPage(page);
   };
 
@@ -85,8 +94,8 @@ export default function page({ params: { categoryId } }) {
                       <p className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-md">New</p>
                       <Image
                         src={
-                          hoveredProducts[product.id]
-                            ? `http://localhost:5001/images/products/${product.image}`
+                          hoveredProducts[ product.id]
+                            ? `http://localhost:5001/images/products/${product.image} `
                             : `http://localhost:5001/images/products/${product.images}`
                         }
                         width={180}
@@ -97,11 +106,9 @@ export default function page({ params: { categoryId } }) {
                     <div className="mt-4 flex justify-between flex-col h-full">
                       <div className="mb-2">
                         <span className="text-xs text-gray-500">{product.category_name}</span>
-                        <h3 className="text-xs text-gray-700">
-                          <a href={product.href}>
+                        <h3 className="text-xs text-gray-700">                     
                             <span aria-hidden="true" className="absolute inset-0" />
-                            {product.name}
-                          </a>
+                            {product.name}                    
                         </h3>
                         <div className="flex items-end justify-between">
                           <p className="text-xs font-medium text-gray-900">{product.sale_price}</p>

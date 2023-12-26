@@ -3,8 +3,15 @@ import { Disclosure, Menu } from '@headlessui/react'
 import { ChevronDownIcon, ChevronRightIcon, FilterIcon, SearchIcon, ViewGridIcon, XIcon } from '@heroicons/react/solid'
 import Link from 'next/link';
 
+interface Category{
+  id: number;
+  name: string;
+  image: string;
+
+}
+
 export default function CategoryFilter() {
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState<Category[]>([]);
     const fetchCategory = () => {
       fetch("http://localhost:5001/api/categories")
         .then((res) => res.json())
@@ -59,8 +66,12 @@ export default function CategoryFilter() {
     const sortBy = (value:any) => {
       let newState = [...sortOptions]
       newState.map(option => option.current = false)
-      newState.find(option => option.name === value).current = true
-      setSortOptions(newState)
+      const selectedOption = newState.find(option => option.name === value);
+      if (selectedOption) {
+        selectedOption.current = true;
+        setSortOptions(newState);
+      }
+      
     } 
     
     useEffect(() => {
@@ -179,8 +190,8 @@ return (
                       id={option.label}
                       defaultValue={option.value}
                       defaultChecked={option.checked}
-                      className={`form-checkbox w-6 h-6 rounded-full border-none ${option.class} focus:ring-gray-200`}
-                    />
+                      className={`form-checkbox w-6 h-6 rounded-full border-none  focus:ring-gray-200`}
+                      />
                   </div>
                 ))}
               </Disclosure.Panel>

@@ -1,20 +1,52 @@
 'use client';
-import React,{useState,useEffect,useContext} from 'react'
+import React,{useState,useEffect,useContext, Attributes} from 'react'
 import Products from '../../_products/products';
 import { Checkbox } from "@material-tailwind/react";
 import Link from 'next/link';
 import { useAuth } from "@clerk/nextjs";
 
 
+
+interface Attribute {
+  name: string;
+  values: string[];
+}
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  short_description: string;
+  regular_price: number;
+  sale_price: number;
+  image: string;
+  images: string;
+  category_name: string;
+  quantity: number;
+  attributes: Attribute[];
+}
+
+
 export default function page({params: { productId }}:any) {
-    const [product, setProduct] = useState({});   
-    const [mainImage, setMainImage] = useState(null);  
-    const [selectedColor, setSelectedColor] = useState(null);
-    const [selectsize, setSelectsize] = useState(null);
+    const [product, setProduct] = useState<Product>({
+      id: 0,
+      name: '',
+      description: '',
+      short_description: '',
+      regular_price: 0,
+      sale_price: 0,
+      image: '',
+      images: '',
+      category_name: '',
+      quantity: 0,
+      attributes: [],
+    });
+    const [mainImage, setMainImage] = useState<string | null>(null); 
+    const [selectedColor, setSelectedColor] = useState<string | null>(null);
+    const [selectsize, setSelectsize] = useState<string | null>(null);
     const [selectedAttributes, setSelectedAttributes] = useState([]);
     const [quantity, setQuantity] = useState(1);
     
-    const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const { isLoaded, userId, sessionId, getToken} = useAuth();
     const getDataProduct = () => {
       fetch(`http://localhost:5001/api/products/${productId}`)
         .then((res) => res.json())
@@ -44,7 +76,7 @@ export default function page({params: { productId }}:any) {
         ]
  
            useEffect(() => {                    
-              setMainImage(product.image);            
+              setMainImage(product.image);          
           }, [product.image]);
         
           console.log(mainImage);              
@@ -253,7 +285,7 @@ export default function page({params: { productId }}:any) {
                         <div className="mb-8">                                                    
                         <div className="pb-6 mb-8 border-b border-gray-300 dark:border-gray-700">
   {product.attributes && product.attributes.map((attr, index) => (
-    <div key={index.name} className="mb-8">
+    <div key={index}className="mb-8">
       <h2 className="mb-2 text-xl font-bold dark:text-gray-400">{attr.name} </h2>
       {attr.name.toLowerCase() === 'color' ? (
         // Render radio buttons for color attribute with dynamic background color

@@ -3,16 +3,37 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan,faHeart } from '@fortawesome/free-solid-svg-icons';
 import Products from '@/app/_products/products';
+import Link from 'next/link';
 
+
+interface CartItem {
+  item_id: number | null;
+  name: string;
+  price: number;
+  regular_price: number;
+  image: string;
+  attributes: {
+    name: string;
+    values: string;
+  }[];
+  quantity: number; // Assuming each item has a quantity property
+}
+interface CartItemData {
+  items: CartItem[];
+}
+interface ItemToDelete {
+  idshopcartItem: number;
+}
+  
 
 export default function Page() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<CartItemData[]>([]);
   const [deleteMessage, setDeleteMessage] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
+  const [itemToDelete, setItemToDelete] =  useState<ItemToDelete | null>(null);
   const [subtotal, setSubtotal] = useState(0);
 
-  const getShopignCart =  () => {
+  const getShopignCart = () => {
     fetch('http://localhost:5001/api/shoppingCart')
       .then((res) => {
         if (!res.ok) {
@@ -20,13 +41,10 @@ export default function Page() {
         }
         return res.json();
       })
-      .then((data) => {
-        console.log(data);
-  
-        // Check if any item has a null item_id
+      .then((data: CartItemData[]) => {
+        // تحديد نوع البيانات للمتغير cartItem
         const hasNullItem = data.some((cartItem) => cartItem.items.some((item) => item.item_id === null));
   
-        // Set cart state accordingly
         if (hasNullItem) {
           setCart([]);
         } else {
@@ -40,7 +58,7 @@ export default function Page() {
   
  
 
-  const showMessage = (message) => {
+  const showMessage = (message:string) => {
     setDeleteMessage(message);
     setTimeout(() => {
       setDeleteMessage('');
@@ -49,26 +67,43 @@ export default function Page() {
   useEffect(() => {
     getShopignCart();
   }, []);
-  const incrementQuantity = (cartIndex, itemIndex) => {
-    const updatedCart = [...cart];
-    updatedCart[cartIndex].items[itemIndex].quantity += 1;
-    setCart(updatedCart);
-  };
 
-  const decrementQuantity = (cartIndex, itemIndex) => {
-    const updatedCart = [...cart];
-    const currentQuantity = updatedCart[cartIndex].items[itemIndex].quantity;
-    if (currentQuantity > 1) {
-      updatedCart[cartIndex].items[itemIndex].quantity -= 1;
-      setCart(updatedCart);
+
+  const updateQuantity = (itemId: number | null, newQuantity: number) => {
+    if (itemId !== null) {
+      fetch('http://localhost:5001/api/wishlist', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: 'yourUserId',
+          itemId: itemId,
+          quantity: newQuantity,
+        }),
+      })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`HTTP error! Status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          // Perform any additional actions as needed
+        })
+        .catch((error) => {
+          console.error('Error updating quantity:', error);
+        });
     }
   };
-  const resetQuantityToOne = (cartIndex, itemIndex) => {
+  
+  const resetQuantityToOne = (cartIndex:number, itemIndex:number) => {
     const updatedCart = [...cart];
     updatedCart[cartIndex].items[itemIndex].quantity = 1;
     setCart(updatedCart);
   };
-  const deleteProductFromCart = (idshopcartItem) => {
+  const deleteProductFromCart = (idshopcartItem:number) => {
     fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
       method: 'DELETE',
       headers: {
@@ -92,24 +127,44 @@ export default function Page() {
         console.error('Error deleting product from cart:', error);
       });
   };
+  const incrementQuantity = (cartIndex:number, itemIndex:number) => {
+    const updatedCart = [...cart];
+    updatedCart[cartIndex].items[itemIndex].quantity += 1;
+    setCart(updatedCart);
+    updateQuantity(updatedCart[cartIndex].items[itemIndex].item_id, updatedCart[cartIndex].items[itemIndex].quantity);
+  };
 
+  const decrementQuantity = (cartIndex:number, itemIndex:number) => {
+    const updatedCart = [...cart];
+    const currentQuantity = updatedCart[cartIndex].items[itemIndex].quantity;
+    if (currentQuantity > 1) {
+      updatedCart[cartIndex].items[itemIndex].quantity -= 1;
+      setCart(updatedCart);
+      updateQuantity(updatedCart[cartIndex].items[itemIndex].item_id, updatedCart[cartIndex].items[itemIndex].quantity);
+    }
+  };
   const confirmDelete = () => {
-    if (itemToDelete) {
+    if (itemToDelete && 'idshopcartItem' in itemToDelete) {
       deleteProductFromCart(itemToDelete.idshopcartItem);
       setItemToDelete(null);
       setShowConfirmation(false);
       window.location.href = '/cart';
     }
   };
+  
 
   const cancelDelete = () => {
     setItemToDelete(null);
     setShowConfirmation(false);
   };
-  const handleDelete = (idshopcartItem) => {
-    setItemToDelete({ idshopcartItem });
-    setShowConfirmation(true);
+  const handleDelete = (idshopcartItem: number | null) => {
+    if (idshopcartItem !== null) {
+      setItemToDelete({ idshopcartItem });
+      setShowConfirmation(true);
+    }
   };
+  
+  
   const calculateSubtotal = () => {
     let total = 0;
     cart.forEach((cartItem) => {
@@ -117,16 +172,15 @@ export default function Page() {
         total += item.quantity * item.price;
       });
     });
-    return total.toFixed(2);
-    console.log(total);
+    return parseFloat(total.toFixed(2));  // <-- Convert the string to a number
   };
+  
 
   useEffect(() => {
     // Recalculate subtotal whenever the cart changes
     const newSubtotal = calculateSubtotal();
     setSubtotal(newSubtotal);
   }, [cart]);
-
 
   return (
     <div>

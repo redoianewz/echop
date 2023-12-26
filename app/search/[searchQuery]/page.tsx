@@ -10,16 +10,45 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function SearchResults({ params: { searchQuery } }) {
-  const [searchResults, setSearchResults] = useState([]);
-  const [hoveredProducts, setHoveredProducts] = useState({});
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  regular_price: number;
+  sale_price: number;
+  category_name: string;
+  image: string;
+  images: string;
+}
+
+interface wishlist {
+  wishlist_id: number;
+  user_id: number;
+  items: {
+    item_id: number;
+    product_id: number;
+    quantity: number;
+    price: number;
+  }[];
+}
+
+interface cart {
+  cart_id: number;
+  user_id: number;
+  items: {
+    item_id: number;
+    product_id: number;
+    quantity: number;
+    price: number;
+  }[];
+}
+
+export default function SearchResults({ params: { searchQuery }} : { params: { searchQuery: string }} ) {
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [hoveredProducts, setHoveredProducts] = useState<Record<number, boolean>>({});
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
-  const [selectedColor, setSelectedColor] = useState(null);
-    const [selectsize, setSelectsize] = useState(null);
-    const [selectedAttributes, setSelectedAttributes] = useState([]);
-    const [cart, setCart] = useState([]);
-    const [wishlist, setWishlist] = useState([]);
+    const [cart, setCart] = useState<cart[]>([]);
+    const [wishlist, setWishlist] = useState<wishlist[]>([]);
     const settings = {  
       dots: true ,
       infinite: true,
@@ -37,7 +66,7 @@ export default function SearchResults({ params: { searchQuery } }) {
       .then((data) => {
         setSearchResults(data.result);
         // Initialize hover state for each product
-        const initialHoverState = data.result.reduce((acc, product) => {
+        const initialHoverState = data.result.reduce((acc: any, product: any) => {
           acc[product.id] = false;
           return acc;
         }, {});
@@ -81,14 +110,14 @@ export default function SearchResults({ params: { searchQuery } }) {
   } , []);
 
   
-  const handleProductHover = (productId) => {
+  const handleProductHover = (productId:number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: true,
     }));
   };
 
-  const handleProductLeave = (productId) => {
+  const handleProductLeave = (productId:number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: false,
@@ -96,40 +125,11 @@ export default function SearchResults({ params: { searchQuery } }) {
   };
 
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page:number) => {
     setCurrentPage(page);
   };
 
-  const handleAddToCart = () => {
-    const requestBody = {       
-      productId: product.id,
-      quantity: 1,
-      price: product.sale_price,
-      productAttributes: [
-        ...selectedAttributes,
-        { attributeId: 'color', attributeValue: selectedColor },
-        { attributeId: 'size', attributeValue: selectsize },
-      ],
-    };
-
-    console.log('Request body:', requestBody);
-
-    fetch('http://localhost:5001/api/shoppingCart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log('Add to cart:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  };
-  const addProductToCart = (productId,price) => {
+  const addProductToCart = (productId:number,price:number) => {
     const requestBody = {
       productId,
       quantity: 1, 
@@ -152,7 +152,7 @@ export default function SearchResults({ params: { searchQuery } }) {
           console.error('Error:', error);
         });
     };
-    const addProductToWishlist = (productId,price) => {
+    const addProductToWishlist = (productId:number,price:number) => {
       const requestBody = {
         productId,
         quantity: 1, 
@@ -175,39 +175,93 @@ export default function SearchResults({ params: { searchQuery } }) {
             console.error('Error:', error);
           });
       };
-    const deleteProductFromWishlist = (idshopcartItem) => {
-      fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: 'yourUserId', // Replace with the actual user ID or identifier
-        }),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error(`HTTP error! Status: ${res.status}`);
-          }
-          return res.json();
-        })
-        .then((data) => {       
+    // const deleteProductFromWishlist = (idshopcartItem:number) => {
+    //   fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
+    //     method: 'DELETE',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       userId: 'yourUserId', // Replace with the actual user ID or identifier
+    //     }),
+    //   })
+    //     .then((res) => {
+    //       if (!res.ok) {
+    //         throw new Error(`HTTP error! Status: ${res.status}`);
+    //       }
+    //       return res.json();
+    //     })
+    //     .then((data) => {       
+    //       getShopignWishlist();
+    //       window.location.reload();
+    //       // Refresh the shopping cart after deletion
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error deleting product from cart:', error);
+    //     });
+    // };
+    const deleteProductFromWishlist = (itemIds: number[]) => {
+      // Assuming you want to delete multiple items at once
+      // Modify the API call accordingly
+      Promise.all(
+        itemIds.map((id) =>
+          fetch(`http://localhost:5001/api/wishlist/${id}`, {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: 'yourUserId', // Replace with the actual user ID or identifier
+            }),
+          })
+        )
+      )
+        .then((responses) =>
+          Promise.all(responses.map((res) => (res.ok ? res.json() : Promise.reject(res))))
+        )
+        .then((data) => {
           getShopignWishlist();
           window.location.reload();
           // Refresh the shopping cart after deletion
         })
         .catch((error) => {
-          console.error('Error deleting product from cart:', error);
+          console.error('Error deleting product from wishlist:', error);
         });
     };
-    const deleteProductFromCart = (idshopcartItem) => {
-      fetch(`http://localhost:5001/api/shoppingCart/${idshopcartItem}`, {
-        method: 'DELETE',
+    
+    // const deleteProductFromCart = (idshopcartItem:number) => {
+    //   fetch(`http://localhost:5001/api/shoppingCart/${idshopcartItem}`, {
+    //     method: 'DELETE',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       userId: 'yourUserId', // Replace with the actual user ID or identifier
+    //     }),
+    //   })
+    //     .then((res) => {
+    //       if (!res.ok) {
+    //         throw new Error(`HTTP error! Status: ${res.status}`);
+    //       }
+    //       return res.json();
+    //     })
+    //     .then((data) => {       
+    //       getShopignCart();
+    //       window.location.reload();
+    //       // Refresh the shopping cart after deletion
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error deleting product from cart:', error);
+    //     });
+    // };   
+    const deleteProductFromCart = (itemIds: number[]) => {
+      fetch('http://localhost:5001/api/shoppingCart/batch-delete', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: 'yourUserId', // Replace with the actual user ID or identifier
+          itemIds,
         }),
       })
         .then((res) => {
@@ -216,7 +270,7 @@ export default function SearchResults({ params: { searchQuery } }) {
           }
           return res.json();
         })
-        .then((data) => {       
+        .then((data) => {
           getShopignCart();
           window.location.reload();
           // Refresh the shopping cart after deletion
@@ -225,7 +279,6 @@ export default function SearchResults({ params: { searchQuery } }) {
           console.error('Error deleting product from cart:', error);
         });
     };
-  
   return (
   <div className="relative mx-auto py-8 sm:py-16 px-4 w-full max-w-7xl">
     <div className="grid grid-cols-4 gap-y-8 gap-x-4">

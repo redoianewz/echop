@@ -1,13 +1,9 @@
 'use client';
 import React, { useState,useEffect } from 'react';
 import Sliders from './home/_slider/slider';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faHeart } from '@fortawesome/free-solid-svg-icons';
 import Products from './_products/products';
 import Category from './_category/category';
-import { clerkClient } from "@clerk/nextjs";
-import { auth } from '@clerk/nextjs';
-
+;
 
 
 
@@ -15,7 +11,6 @@ import { auth } from '@clerk/nextjs';
 
 export default function Home() {
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [users, setUsers] = useState([]);
 
 
 
@@ -33,25 +28,7 @@ export default function Home() {
     { icon: 'feature-5.png', title: 'Happy Sell', description: 'customer satisfaction', color: 'bg-pink-200', textColor: 'text-pink-800' },
     { icon: 'feature-6.png', title: '24/7 Support', description: 'contact us anytime', color: 'bg-orange-200', textColor: 'text-orange-800' },
   ];
-  
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const userList = await clerkClient.users.getUserList();
-        setUsers(userList);
-      } catch (error) {
-        console.error('Error fetching user list:', error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  // Use another useEffect to log the users when the state changes
-  useEffect(() => {
-    console.log('List of users:', users);
-  }, [users]);
+    
 return (
     <div>
       <Sliders />      

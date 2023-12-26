@@ -3,8 +3,29 @@ import React, { useState, useEffect } from 'react';
 import { useAuth ,useUser} from "@clerk/nextjs";
 import Link from 'next/link';
 
+
+interface CartItem {
+  item_id: number | null;
+  product_id: number; // Add this line
+  name: string;
+  price: number;
+  regular_price: number;
+  image: string;
+  attributes: {
+    name: string;
+    values: string;
+  }[];
+  quantity: number;
+}
+
+interface CartItemData {
+  items: CartItem[];
+}
+interface ItemToDelete {
+  idshopcartItem: number;
+}
 export default function Checkout() {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<CartItemData[]>([]);
   const { isSignedIn, user, isLoaded } = useUser();
   const [formData, setFormData] = useState({
     name: '',
@@ -12,6 +33,8 @@ export default function Checkout() {
     address: '',
     city: '',
     phone: '',
+    additionalInfo: '',
+
   });
 console.log('hhh',user)
 
@@ -23,13 +46,10 @@ console.log('hhh',user)
         }
         return res.json();
       })
-      .then((data) => {
-        console.log(data);
-
-        // Check if any item has a null item_id
+      .then((data: CartItemData[]) => {
+        // تحديد نوع البيانات للمتغير cartItem
         const hasNullItem = data.some((cartItem) => cartItem.items.some((item) => item.item_id === null));
-
-        // Set cart state accordingly
+  
         if (hasNullItem) {
           setCart([]);
         } else {
@@ -40,6 +60,7 @@ console.log('hhh',user)
         console.error('Error fetching shopping cart:', error);
       });
   };
+  
 
   useEffect(() => {
     // Fetch the shopping cart data when the component mounts
@@ -95,7 +116,7 @@ console.log('hhh',user)
       });  
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -133,7 +154,7 @@ console.log('hhh',user)
                             </label>
                             <label className="flex border-b border-gray-200 h-12 py-3 items-center">
                                 <span className="text-right px-2">Email</span>
-                                <input name="email" type="email" className="focus:outline-none px-3 w-full" placeholder="try@example.com"  required  defaultValue={user?.emailAddresses?.length > 0 ? user.emailAddresses[0].emailAddress : ''}/>
+                                <input name="email" type="email" className="focus:outline-none px-3 w-full" placeholder="try@example.com"  required    defaultValue={user?.emailAddresses?.[0]?.emailAddress || ''}/>
                             </label>
                             <label className="flex border-b border-gray-200 h-12 py-3 items-center">
                                 <span className="text-right px-2">Address</span>
@@ -196,7 +217,7 @@ console.log('hhh',user)
                    
                 </section>
             </div>
-            {calculateSubtotal() > 0 && (
+            {parseFloat(calculateSubtotal()) > 0  && (
             <Link href="/thankyou">
             <button onClick={submitOrder}
             className="submit-button px-4 py-3 rounded-full bg-orange-500 text-white focus:ring focus:outline-none w-full text-xl font-semibold transition-colors">

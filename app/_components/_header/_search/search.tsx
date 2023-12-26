@@ -11,11 +11,15 @@ interface cartItem
 {
   items: { item_id: string | null }[];
 }
+interface WishlistItem
+{
+  items: { item_id: string | null }[];
+}
 const Search = () => {
   
   const [searchQuery, setSearchQuery] = useState("");
   const [cart, setCart] = useState<cartItem[]>([]);
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
 
   const {  userId, sessionId, getToken } = useAuth();
   const { isLoaded, isSignedIn, user } = useUser();
@@ -140,7 +144,7 @@ const getShopignCart = () => {
         <span className="relative">
           <FontAwesomeIcon icon={faHeart} className='text-3xl text-black' />
           <span className="absolute -top-5 -right-2 bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-          { wishlist.map((cartItem) => cartItem.items.length) > 0 ? wishlist.map((cartItem) => cartItem.items.length) : 0}
+          {wishlist.length > 0 ? wishlist.reduce((total, cartItem) => total + cartItem.items.length, 0) : 0}
           </span>
         </span>
         </Link>
