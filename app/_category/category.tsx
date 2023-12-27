@@ -75,7 +75,7 @@ export default function Category() {
     prevArrow: <PrevArrow />,
   };
   const fetchCategory = () => {
-    fetch("http://localhost:5001/api/categories")
+    fetch("https://bachen-eco.onrender.com/api/categories")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -98,7 +98,7 @@ export default function Category() {
             >            
               <div className="relative bg-white border border-gray-200 rounded-md shadow-md overflow-hidden">
                 <Image
-                  src={'http://localhost:5001/images/category/'+category.image}
+                  src={'https://bachen-eco.onrender.com/images/category/'+category.image}
                   alt={category.name}
                   width={100}
                   height={100}

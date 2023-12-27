@@ -33,7 +33,7 @@ export default function Products({slidestoShow}: {slidestoShow: number}) {
 
   const getShopignCart = () => {
     // Fetch the cart data and update the state
-    fetch('http://localhost:5001/api/shoppingCart')
+    fetch('https://bachen-eco.onrender.com/api/shoppingCart')
       .then((res) => res.json())
       .then((data) => {
         setCart(data); // Update the cart state
@@ -130,7 +130,7 @@ const addProductToCart = (productId:number,price:number) => {
     };
       console.log('Request body:', requestBody);
   
-      fetch('http://localhost:5001/api/wishlist', {
+      fetch('https://bachen-eco.onrender.com/api/wishlist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

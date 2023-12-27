@@ -13,7 +13,7 @@ interface Category{
 export default function CategoryFilter() {
     const [category, setCategory] = useState<Category[]>([]);
     const fetchCategory = () => {
-      fetch("http://localhost:5001/api/categories")
+      fetch("https://bachen-eco.onrender.com/api/categories")
         .then((res) => res.json())
         .then((data) => {
           setCategory(data);
@@ -173,7 +173,7 @@ return (
                     <Link     key={cat.id} href={`/category/${cat.id}`} className="text-base text-gray-700 font-semibold hover:text-orange-400">
                       {cat.name}
                     </Link>
-                    <img src={`http://localhost:5001/images/category/${cat.image}`} alt={cat.name} className="w-8 h-8 rounded-full" />
+                    <img src={`https://bachen-eco.onrender.com/images/category/${cat.image}`} alt={cat.name} className="w-8 h-8 rounded-full" />
                   </div>
                 ))}
               </>
