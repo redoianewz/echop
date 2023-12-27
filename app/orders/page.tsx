@@ -45,7 +45,7 @@ export default function OrdersPage() {
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/api/checkout/${user?.id}`);
+        const response = await fetch(`https://bachen-eco.onrender.com/api/checkout/${user?.id}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

@@ -44,10 +44,11 @@ export default function Products({slidestoShow}: {slidestoShow: number}) {
   };
   const getShopignWishlist = () => {
     // Fetch the cart data and update the state
-    fetch('http://localhost:5001/api/wishlist')
+    fetch('https://bachen-eco.onrender.com/api/wishlist')
       .then((res) => res.json())
       .then((data) => {
-        setWishlist(data); // Update the cart state
+        setWishlist(data); 
+        console.log("wishlist",data);// Update the cart state
       })
       .catch((error) => {
         console.error('Error fetching shopping cart:', error);
@@ -71,7 +72,7 @@ export default function Products({slidestoShow}: {slidestoShow: number}) {
     };
     
   const fetchProducts = () => {
-    fetch("http://localhost:5001/api/products")
+    fetch("https://bachen-eco.onrender.com/api/products")
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -107,7 +108,7 @@ const addProductToCart = (productId:number,price:number) => {
   };
     console.log('Request body:', requestBody);
 
-    fetch('http://localhost:5001/api/shoppingCart', {
+    fetch('https://bachen-eco.onrender.com/api/shoppingCart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -148,7 +149,7 @@ const addProductToCart = (productId:number,price:number) => {
     const deleteProductFromWishlist = (itemIds: number[]) => {
       // Loop through each item ID and delete from the wishlist
       itemIds.forEach((idshopcartItem) => {
-        fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
+        fetch(`https://bachen-eco.onrender.com/api/wishlist/${idshopcartItem}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -177,7 +178,7 @@ const addProductToCart = (productId:number,price:number) => {
     const deleteProductFromCart = (itemIds: number[]) => {
       // Loop through each item ID and delete from the cart
       itemIds.forEach((itemId) => {
-        fetch(`http://localhost:5001/api/shoppingCart/${itemId}`, {
+        fetch(`https://bachen-eco.onrender.com/api/shoppingCart/${itemId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
@@ -202,84 +203,11 @@ const addProductToCart = (productId:number,price:number) => {
           });
       });
     };
-    
+   
 
 
   
-  return (
-    // <div className="mx-auto sm:px-6 sm:py-8 lg:max-w-4xl">
-    //   <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-    //     {paginatedProducts.map((product) => (
-          
-    //         <div 
-    //           className="group relative bg-white p-2 border border-gray-200 rounded-md shadow-md"
-    //           onMouseEnter={() => handleProductHover(product.id)}
-    //           onMouseLeave={() => handleProductLeave(product.id)}
-    //         >
-    //           <Link href={`/products/${product.id}`}>
-    //           <div className="aspect-h-3 h-10 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-40 relative">
-                
-    //             <p className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-md">New</p>
-    //             <Image
-    //               src={
-    //                 hoveredProducts[product.id]
-    //                   ? `http://localhost:5001/images/products/${product.image}`
-    //                   : `http://localhost:5001/images/products/${product.images}`
-    //               }
-    //               width={180}
-    //               height={40}
-    //               alt={product.name}
-    //             />
-                
-    //           </div>
-    //           <div className="mt-4 flex justify-between flex-col h-full">
-    //             <div className="mb-2">                        
-    //               <span className="text-xs text-gray-500">{product.category_name}</span>
-                  
-    //               <h3 className="text-xs text-gray-700">                    
-    //                   <span aria-hidden="true" className="absolute inset-0" />
-    //                 <a href="#">{product.name}</a>                     
-    //               </h3>                
-    //               <div className="flex items-end justify-between">
-    //                 <p className="text-xs font-medium text-gray-900">{product.sale_price}</p>
-    //                 <p className="text-xs line-through text-gray-500">{product.regular_price}</p>
-    //                 <div className="flex space-x-2">
-    //                 <button
-    //                     onClick={(e) => handleAddToCart(product.id, e)} 
-    //                     className="text-xs text-gray-500"
-    //                   >
-    //                     <FontAwesomeIcon                          
-    //                       icon={faCartShopping}
-    //                       className="text-orange-500 border bg-green-100 text-lg border-green-400 rounded-full p-2"
-    //                     />
-    //                   </button>
-    //                   <FontAwesomeIcon
-    //                     icon={faHeart}
-    //                     className="text-orange-500 border bg-green-100 text-lg border-green-400 rounded-full p-2"
-    //                   />
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           </div>
-    //           </Link>
-    //         </div>
-          
-    //     ))}
-    //   </div>      
-    //   <div className="flex justify-center mt-4 space-x-2">
-    //     {pages.map((page) => (
-    //       <button
-    //         key={page}
-    //         onClick={() => handlePageChange(page)}
-    //         className={`px-3 py-1 rounded-md ${
-    //           currentPage === page ? 'bg-orange-500 text-white' : 'bg-gray-300 text-gray-700'
-    //         }`}
-    //       >
-    //         {page}
-    //       </button>
-    //     ))}
-    //   </div>
-    // </div>
+  return (   
     <div className="my-8">
     <Slider {...settings}>
       {products.map((product, index) => (
@@ -296,8 +224,8 @@ const addProductToCart = (productId:number,price:number) => {
               <Image
                 src={
                   hoveredProducts[product.id]
-                    ? `http://localhost:5001/images/products/${product.image}`
-                    : `http://localhost:5001/images/products/${product.images}`
+                    ? `https://bachen-eco.onrender.com/images/products/${product.image}`
+                    : `https://bachen-eco.onrender.com/images/products/${product.images}`
                 }
                 width={180}
                 height={40}

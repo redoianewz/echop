@@ -21,7 +21,7 @@ const PageDropdown = () => {
   const [category, setCategory] = useState<Category[]>([]);
 
   const fetchCategory = () => {
-    fetch("http://localhost:5001/api/categories")
+    fetch("https://bachen-eco.onrender.com/api/categories")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -109,7 +109,7 @@ const PageDropdown = () => {
                         href={`/category/${category.id}`}onClick={handleCategoryClick}>
                           <img
                             src={
-                              "http://localhost:5001/images/category/" +
+                              "https://bachen-eco.onrender.com/images/category/" +
                               category.image
                             }
                             alt={category.name}

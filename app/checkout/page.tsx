@@ -39,7 +39,7 @@ export default function Checkout() {
 console.log('hhh',user)
 
   const getShopignCart = () => {
-    fetch('http://localhost:5001/api/shoppingCart')
+    fetch('https://bachen-eco.onrender.com/api/shoppingCart')
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -95,7 +95,7 @@ console.log('hhh',user)
       }))),
     };
 
-    fetch('http://localhost:5001/api/checkout', {
+    fetch('https://bachen-eco.onrender.com/api/checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -240,7 +240,7 @@ console.log('hhh',user)
                     <div key={itemIndex}>
                 <li className="grid grid-cols-6 gap-2 border-b-1 mb-2">
                     <div className="col-span-1 self-center">
-                        <img src={`http://localhost:5001/images/products/${item.image}`} alt={item.name} className="rounded w-full"/>
+                        <img src={`https://bachen-eco.onrender.com/images/products/${item.image}`} alt={item.name} className="rounded w-full"/>
                     </div>
                     <div className="flex flex-col col-span-3 pt-2">
                         <span className="text-gray-600 text-md font-semi-bold">{item.name}</span>                        

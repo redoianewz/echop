@@ -45,7 +45,7 @@ export default function OrdersPage({params: { orderId }} : {params: { orderId: s
   useEffect(() => {
     const getOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/api/checkout/${user?.id}/${orderId}`); // add orderId to the URL
+        const response = await fetch(`https://bachen-eco.onrender.com/api/checkout/${user?.id}/${orderId}`); // add orderId to the URL
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -79,7 +79,7 @@ export default function OrdersPage({params: { orderId }} : {params: { orderId: s
          {orders.items && orders.items.map(item => (
         <div className="mt-4 md:mt-6 flex flex-col md:flex-row justify-start items-start md:items-center md:space-x-6 xl:space-x-8 w-full">
           <div className="pb-4 md:pb-8 w-full md:w-40">
-            <img className="w-full hidden md:block" src={`http://localhost:5001/images/products/${item.productImage}`} alt={item.productName}  />
+            <img className="w-full hidden md:block" src={`https://bachen-eco.onrender.com/images/products/${item.productImage}`} alt={item.productName}  />
             <img className="w-full md:hidden" src="https://i.ibb.co/L039qbN/Rectangle-10.png" alt="dress" />
           </div>
           <div className="border-b border-gray-200 md:flex-row flex-col flex justify-between items-start w-full pb-8 space-y-4 md:space-y-0">

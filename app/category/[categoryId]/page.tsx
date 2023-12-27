@@ -27,7 +27,7 @@ export default function page({ params: { categoryId }} : { params: { categoryId:
   const itemsPerPage = 8;
 
   const getDataCategory = () => {
-    fetch(`http://localhost:5001/api/categories/${categoryId}`)
+    fetch(`https://bachen-eco.onrender.com/api/categories/${categoryId}`)
       .then((res) => res.json())
       .then((data:Product[]) => {
         setProducts(data);
@@ -95,8 +95,8 @@ export default function page({ params: { categoryId }} : { params: { categoryId:
                       <Image
                         src={
                           hoveredProducts[ product.id]
-                            ? `http://localhost:5001/images/products/${product.image} `
-                            : `http://localhost:5001/images/products/${product.images}`
+                            ? `https://bachen-eco.onrender.com/images/products/${product.image} `
+                            : `https://bachen-eco.onrender.com/images/products/${product.images}`
                         }
                         width={180}
                         height={40}

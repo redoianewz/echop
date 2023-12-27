@@ -1,9 +1,8 @@
-/** @type {import('next').NextConfig} */
+// next.config.js
 const nextConfig = {
-    images: {
-      domains: ['bachen-eco.onrender.com', 'localhost'],
-    },
-  };
-  
-  module.exports = nextConfig;
-  
+  images: {
+    domains: ['bachen-eco.onrender.com'],
+  },
+};
+
+module.exports = nextConfig;

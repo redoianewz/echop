@@ -9,7 +9,7 @@ import CategoryFilter from '../_components/filterShop';
 const CategoryFilter1 = () => {
   const [category, setCategory] = useState([]);
   const fetchCategory = () => {
-    fetch("http://localhost:5001/api/categories")
+    fetch("https://bachen-eco.onrender.com/api/categories")
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);

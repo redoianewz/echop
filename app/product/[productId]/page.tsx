@@ -48,7 +48,7 @@ export default function page({params: { productId }}:any) {
     
     const { isLoaded, userId, sessionId, getToken} = useAuth();
     const getDataProduct = () => {
-      fetch(`http://localhost:5001/api/products/${productId}`)
+      fetch(`https://bachen-eco.onrender.com/api/products/${productId}`)
         .then((res) => res.json())
         .then((data) => {
           setProduct(data[0]);
@@ -94,7 +94,7 @@ export default function page({params: { productId }}:any) {
 
     console.log('Request body:', requestBody);
 
-    fetch('http://localhost:5001/api/shoppingCart', {
+    fetch('https://bachen-eco.onrender.com/api/shoppingCart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ export default function page({params: { productId }}:any) {
 
     console.log('Request body:', requestBody);
 
-    fetch('http://localhost:5001/api/wishlist', {
+    fetch('https://bachen-eco.onrender.com/api/wishlist', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export default function page({params: { productId }}:any) {
               <div className="w-full px-4 md:w-1/2 ">
                   <div className="sticky top-0 z-50 overflow-hidden border border-orange-500">
                   <div className="relative mb-6 lg:mb-10" style={{ height: '450px' }}>
-          <img src={'http://localhost:5001/images/products/' + mainImage} alt="" className="object-contain w-full h-full" />
+          <img src={'https://bachen-eco.onrender.com/images/products/' + mainImage} alt="" className="object-contain w-full h-full" />
         </div>
         <hr />
         <div className="flex-wrap hidden md:flex ">
@@ -186,7 +186,7 @@ export default function page({params: { productId }}:any) {
             onClick={() => handleThumbnailClick(thumbnail)}
             className="block border border-teal-100 dark:border-gray-700 dark:hover:border-gray-600 hover:border-teal-300"
           >
-            <img src={'http://localhost:5001/images/products/' +thumbnail } alt="" className="object-cover w-full lg:h-32" />
+            <img src={'https://bachen-eco.onrender.com/images/products/' +thumbnail } alt="" className="object-cover w-full lg:h-32" />
           </button>
         </div>
       ))}

@@ -26,7 +26,7 @@ const Search = () => {
 
 console.log('user',user);
 const getShopignCart = () => {
-  fetch('https://bachen-eco.onrender.comrender.com/api/shoppingCart')
+  fetch('https://bachen-eco.onrender.com/api/shoppingCart')
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
@@ -48,7 +48,7 @@ const getShopignCart = () => {
 };
 
   const getShopignWishlist =  () => {
-    fetch('https://bachen-eco.onrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.comrender.com/api/wishlist')
+    fetch('https://bachen-eco.onrender.com/api/wishlist')
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);

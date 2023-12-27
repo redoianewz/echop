@@ -61,7 +61,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
     };
   const fetchData = () => {
     // Fetch data based on searchQuery
-    fetch(`http://localhost:5001/api/search/${searchQuery}`)
+    fetch(`https://bachen-eco.onrender.com/api/search/${searchQuery}`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data.result);
@@ -82,7 +82,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
   }, [searchQuery]);
   const getShopignCart = () => {
     // Fetch the cart data and update the state
-    fetch('http://localhost:5001/api/shoppingCart')
+    fetch('https://bachen-eco.onrender.com/api/shoppingCart')
       .then((res) => res.json())
       .then((data) => {
         setCart(data); // Update the cart state
@@ -93,7 +93,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
   };
   const getShopignWishlist = () => {
     // Fetch the cart data and update the state
-    fetch('http://localhost:5001/api/wishlist')
+    fetch('https://bachen-eco.onrender.com/api/wishlist')
       .then((res) => res.json())
       .then((data) => {
         setWishlist(data); // Update the cart state
@@ -137,7 +137,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
     };
       console.log('Request body:', requestBody);
   
-      fetch('http://localhost:5001/api/shoppingCart', {
+      fetch('https://bachen-eco.onrender.com/api/shoppingCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
       };
         console.log('Request body:', requestBody);
     
-        fetch('http://localhost:5001/api/wishlist', {
+        fetch('https://bachen-eco.onrender.com/api/wishlist', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -176,7 +176,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
           });
       };
     // const deleteProductFromWishlist = (idshopcartItem:number) => {
-    //   fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
+    //   fetch(`https://bachen-eco.onrender.com/api/wishlist/${idshopcartItem}`, {
     //     method: 'DELETE',
     //     headers: {
     //       'Content-Type': 'application/json',
@@ -205,7 +205,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
       // Modify the API call accordingly
       Promise.all(
         itemIds.map((id) =>
-          fetch(`http://localhost:5001/api/wishlist/${id}`, {
+          fetch(`https://bachen-eco.onrender.com/api/wishlist/${id}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
@@ -230,7 +230,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
     };
     
     // const deleteProductFromCart = (idshopcartItem:number) => {
-    //   fetch(`http://localhost:5001/api/shoppingCart/${idshopcartItem}`, {
+    //   fetch(`https://bachen-eco.onrender.com/api/shoppingCart/${idshopcartItem}`, {
     //     method: 'DELETE',
     //     headers: {
     //       'Content-Type': 'application/json',
@@ -255,7 +255,7 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
     //     });
     // };   
     const deleteProductFromCart = (itemIds: number[]) => {
-      fetch('http://localhost:5001/api/shoppingCart/batch-delete', {
+      fetch('https://bachen-eco.onrender.com/api/shoppingCart/batch-delete', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -300,8 +300,8 @@ export default function SearchResults({ params: { searchQuery }} : { params: { s
               <Image
                 src={
                   hoveredProducts[product.id]
-                    ? `http://localhost:5001/images/products/${product.image}`
-                    : `http://localhost:5001/images/products/${product.images}`
+                    ? `https://bachen-eco.onrender.com/images/products/${product.image}`
+                    : `https://bachen-eco.onrender.com/images/products/${product.images}`
                 }
                 width={180}
                 height={40}

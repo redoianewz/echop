@@ -34,7 +34,7 @@ export default function Page() {
   const [subtotal, setSubtotal] = useState(0);
 
   const getShopignCart = () => {
-    fetch('http://localhost:5001/api/shoppingCart')
+    fetch('https://bachen-eco.onrender.com/api/wishlist')
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -49,6 +49,7 @@ export default function Page() {
           setCart([]);
         } else {
           setCart(data);
+          console.log('data', data)
         }
       })
       .catch((error) => {
@@ -71,7 +72,7 @@ export default function Page() {
 
   const updateQuantity = (itemId: number | null, newQuantity: number) => {
     if (itemId !== null) {
-      fetch('http://localhost:5001/api/wishlist', {
+      fetch('https://bachen-eco.onrender.com/api/wishlist', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +105,7 @@ export default function Page() {
     setCart(updatedCart);
   };
   const deleteProductFromCart = (idshopcartItem:number) => {
-    fetch(`http://localhost:5001/api/wishlist/${idshopcartItem}`, {
+    fetch(`https://bachen-eco.onrender.com/api/wishlist/${idshopcartItem}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -238,7 +239,7 @@ export default function Page() {
       >
        
         <img
-          src={`http://localhost:5001/images/products/${item.image}`}
+          src={`https://bachen-eco.onrender.com/images/products/${item.image}`}
           alt="product-image"
           className="w-full rounded-lg sm:w-40 h-24"
         /> 
