@@ -1,13 +1,12 @@
-'use client';
-import React,{useState,useEffect,createRef} from "react";
+"use client";
+import React, { useState, useEffect, createRef } from "react";
 import { createPopper } from "@popperjs/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faList } from "@fortawesome/free-solid-svg-icons";
-import Link from 'next/link';
-
-
+import Link from "next/link";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 // ... (previous imports)
-interface Category{
+interface Category {
   id: number;
   name: string;
   image: string;
@@ -17,11 +16,11 @@ interface Category{
 const PageDropdown = () => {
   const [popoverShow, setPopoverShow] = useState(false);
   const btnRef = createRef<HTMLButtonElement>();
-  const popoverRef = createRef<HTMLDivElement>();  
+  const popoverRef = createRef<HTMLDivElement>();
   const [category, setCategory] = useState<Category[]>([]);
 
   const fetchCategory = () => {
-    fetch("https://bachen-eco.onrender.com/api/categories")
+    fetch(`${apiURL}/api/categories`)
       .then((res) => res.json())
       .then((data) => {
         setCategory(data);
@@ -32,7 +31,7 @@ const PageDropdown = () => {
     fetchCategory();
 
     // Add event listener to close popover on outside click
-    const handleClickOutside = (event:MouseEvent) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         popoverRef.current &&
         !popoverRef.current.contains(event.target as Node) &&
@@ -55,31 +54,30 @@ const PageDropdown = () => {
   const openPopover = () => {
     if (btnRef.current && popoverRef.current) {
       createPopper(btnRef.current, popoverRef.current, {
-        placement: "bottom"
+        placement: "bottom",
       });
       setPopoverShow(true);
     }
   };
-  
 
-  const closePopover = () => {      
+  const closePopover = () => {
     setPopoverShow(false);
   };
 
   const handleCategoryClick = () => {
     // Close the popover when a category is clicked
     closePopover();
-  }; 
-    return (
-      <>
-        <div className="flex flex-wrap" style={{ marginTop: -8 + "px" }} >
-          <div className="w-full text-center">
+  };
+  return (
+    <>
+      <div className="flex flex-wrap" style={{ marginTop: -8 + "px" }}>
+        <div className="w-full text-center">
           <button
             className=" text-black active:bg-blueGray-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 ease-linear transition-all duration-150"
             type="button"
             onClick={() => {
               popoverShow ? closePopover() : openPopover();
-            }}           
+            }}
             ref={btnRef}
           >
             <FontAwesomeIcon icon={faList} className="mr-4" />
@@ -92,49 +90,40 @@ const PageDropdown = () => {
             }
             ref={popoverRef}
           >
-
-              <div className="bg-white">
-                <div className="bg-white text-black opacity-75 font-semibold p-3 mb-0 border-b border-solid border-blueGray-100 uppercase rounded-t-lg hover:text-orange-500">
-                  Categories
-                </div>
-                <div className="text-black p-3 flex flex-wrap gap-6">
-                  {category.map((category, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center space-x-3 mb-3 text-black w-full md:w-1/2 lg:w-1/6 hover:text-orange-500"
+            <div className="bg-white">
+              <div className="bg-white text-black opacity-75 font-semibold p-3 mb-0 border-b border-solid border-blueGray-100 uppercase rounded-t-lg hover:text-orange-500">
+                Categories
+              </div>
+              <div className="text-black p-3 flex flex-wrap gap-6">
+                {category.map((category, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 mb-3 text-black w-full md:w-1/2 lg:w-1/6 hover:text-orange-500"
+                  >
+                    <Link
+                      key={category.id}
+                      href={`/category/${category.id}`}
+                      onClick={handleCategoryClick}
                     >
-                      
-                        <Link
-                         key={category.id}
-                        href={`/category/${category.id}`}onClick={handleCategoryClick}>
-                          <img
-                            src={
-                              "https://bachen-eco.onrender.com/images/category/" +
-                              category.image
-                            }
-                            alt={category.name}
-                            className="w-8 h-8 rounded-full"
-                          />
-                          <div>
-                            <div className="font-semibold">
-                              {category.name}
-                            </div>
-                            <div className="text-xs">
-                              {category.description}
-                            </div>
-                          </div>
-                        </Link>
-                     
-                    </div>
-                  ))}
-                </div>
+                      <img
+                        src={`${apiURL}/images/category/` + category.image}
+                        alt={category.name}
+                        className="w-8 h-8 rounded-full"
+                      />
+                      <div>
+                        <div className="font-semibold">{category.name}</div>
+                        <div className="text-xs">{category.description}</div>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
-      </>
-    );
-  };
-  
-  export default PageDropdown;
-  
+      </div>
+    </>
+  );
+};
+
+export default PageDropdown;

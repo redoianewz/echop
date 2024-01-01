@@ -1,11 +1,10 @@
-'use client';
-import React,{useState,useEffect} from 'react'
-import CategoryFilter from '@/app/_components/filterShop';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faHeart } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
-import Image from 'next/image';
-
+"use client";
+import React, { useState, useEffect } from "react";
+import CategoryFilter from "@/app/_components/filterShop";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping, faHeart } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+import Image from "next/image";
 
 // ... (previous imports)
 
@@ -19,45 +18,52 @@ interface Product {
   regular_price: string;
   category_name: string;
 }
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export default function page({ params: { categoryId }} : { params: { categoryId: string } }) {
+export default function page({
+  params: { categoryId },
+}: {
+  params: { categoryId: string };
+}) {
   const [products, setProducts] = useState<Product[]>([]);
-  const [hoveredProducts, setHoveredProducts] = useState<{ [key: number]: boolean }>({});
+  const [hoveredProducts, setHoveredProducts] = useState<{
+    [key: number]: boolean;
+  }>({});
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
   const getDataCategory = () => {
-    fetch(`https://bachen-eco.onrender.com/api/categories/${categoryId}`)
+    fetch(`${apiURL}/api/categories/${categoryId}`)
       .then((res) => res.json())
-      .then((data:Product[]) => {
+      .then((data: Product[]) => {
         setProducts(data);
         // Initialize hover state for each product
-        const initialHoverState = data.reduce((acc :any, product) => {
+        const initialHoverState = data.reduce((acc: any, product) => {
           acc[product.id] = false;
           return acc;
         }, {});
         setHoveredProducts(initialHoverState);
       })
       .catch((error) => {
-        console.error('Error fetching Category:', error);
+        console.error("Error fetching Category:", error);
       });
   };
 
   useEffect(() => {
-    console.log('Category ID:', categoryId);
+    console.log("Category ID:", categoryId);
     if (categoryId) {
       getDataCategory();
     }
   }, [categoryId]);
 
-  const handleProductHover = (productId:number) => {
+  const handleProductHover = (productId: number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: true,
     }));
   };
 
-  const handleProductLeave = (productId:number) => {
+  const handleProductLeave = (productId: number) => {
     setHoveredProducts((prevHoveredProducts) => ({
       ...prevHoveredProducts,
       [productId]: false,
@@ -66,7 +72,7 @@ export default function page({ params: { categoryId }} : { params: { categoryId:
 
   const totalPages = Math.ceil(products.length / itemsPerPage);
 
-  const handlePageChange = (page:number) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
@@ -91,12 +97,14 @@ export default function page({ params: { categoryId }} : { params: { categoryId:
                     onMouseLeave={() => handleProductLeave(product.id)}
                   >
                     <div className="aspect-h-3 h-10 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-40 relative">
-                      <p className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-md">New</p>
+                      <p className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-md">
+                        New
+                      </p>
                       <Image
                         src={
-                          hoveredProducts[ product.id]
-                            ? `https://bachen-eco.onrender.com/images/products/${product.image} `
-                            : `https://bachen-eco.onrender.com/images/products/${product.images}`
+                          hoveredProducts[product.id]
+                            ? `${apiURL}/images/products/${product.image} `
+                            : `${apiURL}/images/products/${product.images}`
                         }
                         width={180}
                         height={40}
@@ -105,14 +113,23 @@ export default function page({ params: { categoryId }} : { params: { categoryId:
                     </div>
                     <div className="mt-4 flex justify-between flex-col h-full">
                       <div className="mb-2">
-                        <span className="text-xs text-gray-500">{product.category_name}</span>
-                        <h3 className="text-xs text-gray-700">                     
-                            <span aria-hidden="true" className="absolute inset-0" />
-                            {product.name}                    
+                        <span className="text-xs text-gray-500">
+                          {product.category_name}
+                        </span>
+                        <h3 className="text-xs text-gray-700">
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0"
+                          />
+                          {product.name}
                         </h3>
                         <div className="flex items-end justify-between">
-                          <p className="text-xs font-medium text-gray-900">{product.sale_price}</p>
-                          <p className="text-xs line-through text-gray-500">{product.regular_price}</p>
+                          <p className="text-xs font-medium text-gray-900">
+                            {product.sale_price}
+                          </p>
+                          <p className="text-xs line-through text-gray-500">
+                            {product.regular_price}
+                          </p>
                           <div className="flex space-x-2">
                             <FontAwesomeIcon
                               icon={faCartShopping}
@@ -136,7 +153,9 @@ export default function page({ params: { categoryId }} : { params: { categoryId:
                   key={page}
                   onClick={() => handlePageChange(page)}
                   className={`px-3 py-1 rounded-md ${
-                    currentPage === page ? 'bg-orange-500 text-white' : 'bg-gray-300 text-gray-700'
+                    currentPage === page
+                      ? "bg-orange-500 text-white"
+                      : "bg-gray-300 text-gray-700"
                   }`}
                 >
                   {page}

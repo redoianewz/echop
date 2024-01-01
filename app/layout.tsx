@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google'
 import './globals.css'
 import Footer from './_components/_footer/footer'
 import Header from './_components/_header/header'
+import EmailSubscription from './_components/_footer/_subcration/EmailSubcration';
 import { ClerkProvider } from '@clerk/nextjs'
 
 const poppins = Poppins({
@@ -31,7 +32,8 @@ export default function RootLayout({
         >
         
           <Header /><hr/>
-          <main>{children}</main><hr />
+          <main>{children}</main>
+          <EmailSubscription />
           <Footer />
        
         </div>

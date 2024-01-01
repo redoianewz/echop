@@ -1,12 +1,7 @@
 // navbar/page.jsx
 'use client';
 import React, { useState } from 'react';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faList } from "@fortawesome/free-solid-svg-icons";
-import Dropdown from 'react-dropdown-select';
-import { Disclosure, Menu } from '@headlessui/react'
-import { ChevronRightIcon,} from '@heroicons/react/solid'
-import PageDropb from '@/app/menu/page';
+import PageDropb from '@/app/_menu/menu';
 import { useAuth } from "@clerk/nextjs";
 import Link from 'next/link';
 const Navbar = () => {

@@ -3,7 +3,7 @@ import React from 'react';
 
 const EmailSubscription = () => {
   return (
-    <div className="flex flex-nowrap min-h-max " >
+    <div className="flex flex-nowrap min-h-max md:justify-center items-center py-12">
       <div className="w-full bg-gray-100 drop-shadow-md rounded-md">
         <div className=" flex flex-nowrap lg:flex-nowrap lg:items-center">
           <div className="lg:w-1/2 ml-12 lg:pr-4">
