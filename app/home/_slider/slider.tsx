@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 const Sliders = () => {
   const image = 'images/slider/slider-1.png';
   const image2 = 'images/slider/slider-2.png';  
+  const image3 = "images/slider/btn-brush-bg.png";
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -36,31 +37,46 @@ const Sliders = () => {
       <div className="hero-slider-1 flex dot-style-1 dot-style-1-position-1">
         <div className="single-hero-slider single-animation-wrap w-full bg-gray-100">
           <div className="container mx-auto">
-            <h4 className="animated text-6xl">{currentSlideContent.topTitle}</h4>
+            <h4 className="animated text-6xl">
+              {currentSlideContent.topTitle}
+            </h4>
             <div className="flex flex-wrap items-center">
               <div className="lg:w-5/12 md:w-6/12">
                 <div className="hero-slider-content-2">
-                  
-                  <h2 className="animated text-4xl font-extrabold">{currentSlideContent.title}</h2>
-                  <h1 className="animated text-5xl font-extrabold text-brand">{currentSlideContent.subTitle}</h1>
+                  <h2 className="animated text-4xl font-extrabold">
+                    {currentSlideContent.title}
+                  </h2>
+                  <h1 className="animated text-5xl font-extrabold text-brand">
+                    {currentSlideContent.subTitle}
+                  </h1>
                   <p className="animated">{currentSlideContent.offer}</p>
                 </div>
-                <a href="#"
-                      className="animated inline-block mt-4 px-8 py-3 text-black rounded-full"
-                      style={{
-                        backgroundImage: `url('images/slider/btn-brush-bg.png')`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                      }}
-                    >
-                      Shop Now
-                    </a>
-
+                <a
+                  href="#"
+                  className="animated inline-block mt-4 px-8 py-3 text-black rounded-full"
+                  style={{
+                    backgroundImage: `url(${image2})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                  }}
+                >
+                  Shop Now
+                </a>
               </div>
               <div className="lg:w-7/12 md:w-6/12">
                 <div className="single-slider-img single-slider-img-1 mb-16">
-                  <img className="animated w-full" src={currentSlide === 0 ? image : currentSlide === 1 ? image2:image2} alt={`Slider Title ${currentSlide + 1}`} />
+                  <img
+                    className="animated w-full"
+                    src={
+                      currentSlide === 0
+                        ? image
+                        : currentSlide === 1
+                        ? image2
+                        : image2
+                    }
+                    alt={`Slider Title ${currentSlide + 1}`}
+                  />
                 </div>
               </div>
             </div>
