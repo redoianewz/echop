@@ -60,7 +60,7 @@ export default function Products({ slidestoShow }: { slidestoShow: number }) {
        }
      }, []); 
 const getShopignCart = () => {
-  console.log("this url api:", `${apiURL}/api/shoppingCart/${uuid}`);
+
   fetch(`${apiURL}/api/shoppingCart/${uuid}`)
     .then((res) => {
       if (!res.ok) {
@@ -77,7 +77,7 @@ const getShopignCart = () => {
         setCart([]);
       } else {
         setCart(data);
-        console.log("ttttttttttttttttttttdis data", data); 
+      
       }
     })
     .catch((error) => {
@@ -88,8 +88,7 @@ const getShopignCart = () => {
    useEffect(() => {
     getShopignCart();
   }, [uuid]);
-  const getShopignWishlist = () => {
-    console.log("this url api:", `${apiURL}/api/wishlist/${uuid}`);
+  const getShopignWishlist = () => {  
     fetch(`${apiURL}/api/shoppingCart/${uuid}`)
       .then((res) => {
         if (!res.ok) {
@@ -106,7 +105,6 @@ const getShopignCart = () => {
           setWishlist([]);
         } else {
           setWishlist(data);
-          console.log("ttttttttttttttttttttdis data", data);
         }
       })
       .catch((error) => {
@@ -127,6 +125,19 @@ const getShopignCart = () => {
     autoplaySpeed: 2000,
     autoplay: true,
   };
+  const mobileSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: slidestoShow - 4,
+    slidesToScroll: 2,
+    rows: 2,
+    autoplaySpeed: 2000,
+    autoplay: true,
+  };
+
+  // Use window.innerWidth to determine the screen width
+  const isMobile = window.innerWidth < 740;
 
   const fetchProducts = () => {
     fetch(`${apiURL}/api/products`)
@@ -262,7 +273,7 @@ const getShopignCart = () => {
 
   return (
     <div className="my-8">
-      <Slider {...settings}>
+      <Slider {...(isMobile ? mobileSettings : settings)}>
         {products.map((product, index) => (
           <div
             key={index}
@@ -270,9 +281,9 @@ const getShopignCart = () => {
             onMouseLeave={() => handleProductLeave(product.id)}
             className="mt-2"
           >
-            <div className="block  bg-white p-4 rounded-md transition duration-300 hover:shadow-lg focus:outline-none w-56">
+            <div className="block bg-white p-4 rounded-md transition duration-300 hover:shadow-lg focus:outline-none w-56">
               <Link href={`/product/${product.id}`}>
-                <div className="aspect-h-3 h-10 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-40 relative w-48">
+                <div className="aspect-h-3 h-40 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 relative">
                   <p className="absolute -top-1 -left-1 bg-orange-500 text-white px-2 py-1 rounded-md">
                     New
                   </p>
@@ -284,23 +295,25 @@ const getShopignCart = () => {
                         : `${apiURL}/images/products/${product.images}`
                     }
                     width={180}
-                    height={40}
+                    height={240}
                     alt={product.name}
                   />
                 </div>
               </Link>
-              <span className="text-xs text-gray-500">
-                {product.category_name}
-              </span>
-              <h3 className="mt-1 text-sm font-medium text-gray-900">
-                {product.name}
-              </h3>
-              <p className="mt-1 text-xs text-gray-700">
-                <span>{product.sale_price}dh</span> -{" "}
-                <span className="text-base font-normal text-gray-500 line-through dark:text-gray-400">
-                  {product.regular_price}dh
-                </span>{" "}
-              </p>
+              <div className="mt-2">
+                <span className="text-xs text-gray-500">
+                  {product.category_name}
+                </span>
+                <h3 className="mt-1 text-sm font-medium text-gray-900">
+                  {product.name}
+                </h3>
+                <p className="mt-1 text-xs text-gray-700">
+                  <span>{product.sale_price}dh</span> -{" "}
+                  <span className="text-base font-normal text-gray-500 line-through dark:text-gray-400">
+                    {product.regular_price}dh
+                  </span>{" "}
+                </p>
+              </div>
               <div>
                 <div className="text-start">
                   <ul className="flex mb-4 mr-2 lg:mb-0">

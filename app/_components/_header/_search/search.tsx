@@ -25,74 +25,74 @@ const Search = () => {
   const [wishlist, setWishlist] = useState<WishlistItem[]>([]);
 
   const { userId, sessionId, getToken } = useAuth();
-     const [uuid, setUuid] = useState("");
+  const [uuid, setUuid] = useState("");
 
-     useEffect(() => {
-       const storedUuid = localStorage.getItem("deviceUuid");
-       if (storedUuid) {
-         setUuid(storedUuid);
-       } else {
-         const newUuid = uuidv4();
-         setUuid(newUuid);
-         localStorage.setItem("deviceUuid", newUuid);
-       }
-     }, []); 
+  useEffect(() => {
+    const storedUuid = localStorage.getItem("deviceUuid");
+    if (storedUuid) {
+      setUuid(storedUuid);
+    } else {
+      const newUuid = uuidv4();
+      setUuid(newUuid);
+      localStorage.setItem("deviceUuid", newUuid);
+    }
+  }, []);
 
-   const getShopignCart = () => {
-     fetch(`${apiURL}/api/shoppingCart/${uuid}`)
-       .then((res) => {
-         if (!res.ok) {
-           throw new Error(`HTTP error! Status: ${res.status}`);
-         }
-         return res.json();
-       })
-       .then((data: cartItem[]) => {
-         // تحديد نوع البيانات للمتغير cartItem
-         const hasNullItem = data.some((cartItem) =>
-           cartItem.items.some((item) => item.item_id === null)
-         );
+  const getShopignCart = () => {
+    fetch(`${apiURL}/api/shoppingCart/${uuid}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data: cartItem[]) => {
+        // تحديد نوع البيانات للمتغير cartItem
+        const hasNullItem = data.some((cartItem) =>
+          cartItem.items.some((item) => item.item_id === null)
+        );
 
-         if (hasNullItem) {
-           setCart([]);
-         } else {
-           setCart(data);
-         }
-       })
-       .catch((error) => {
-         console.error("Error fetching shopping cart:", error);
-       });
-   }; 
-   const getShopignWishlist = () => {
-     // Fetch the cart data and update the state
-   fetch(`${apiURL}/api/wishlist/${uuid}`)
-     .then((res) => {
-       if (!res.ok) {
-         throw new Error(`HTTP error! Status: ${res.status}`);
-       }
-       return res.json();
-     })
-     .then((data: WishlistItem[]) => {
-       // تحديد نوع البيانات للمتغير cartItem
-       const hasNullItem = data.some((cartItem) =>
-         cartItem.items.some((item) => item.item_id === null)
-       );
+        if (hasNullItem) {
+          setCart([]);
+        } else {
+          setCart(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching shopping cart:", error);
+      });
+  };
+  const getShopignWishlist = () => {
+    // Fetch the cart data and update the state
+    fetch(`${apiURL}/api/wishlist/${uuid}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data: WishlistItem[]) => {
+        // تحديد نوع البيانات للمتغير cartItem
+        const hasNullItem = data.some((cartItem) =>
+          cartItem.items.some((item) => item.item_id === null)
+        );
 
-       if (hasNullItem) {
-         setWishlist([]);
-       } else {
-         setWishlist(data);
-       }
-     })
-     .catch((error) => {
-       console.error("Error fetching shopping cart:", error);
-     });
-   };
-   useEffect(() => {
-     getShopignCart();
-   }, [uuid]);
-   useEffect(() => {
-     getShopignWishlist();
-   }, [uuid]);
+        if (hasNullItem) {
+          setWishlist([]);
+        } else {
+          setWishlist(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching shopping cart:", error);
+      });
+  };
+  useEffect(() => {
+    getShopignCart();
+  }, [uuid]);
+  useEffect(() => {
+    getShopignWishlist();
+  }, [uuid]);
 
   const handleSearchChange = (e: any) => {
     const query = e.target.value;
@@ -109,7 +109,7 @@ const Search = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="border border-gray-300 rounded-full px-52 py-3 focus:outline-none focus:border-orange-700"
+            className="border border-gray-300 rounded-full  focus:outline-none focus:border-orange-700 lg:w-[500px] xl:w-64 px-6 py-2"
             value={searchQuery}
             onChange={handleSearchChange}
           />

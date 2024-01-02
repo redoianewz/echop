@@ -61,16 +61,14 @@ interface Category {
 export default function Category() {
   const [category, setCategory] = useState<Category[]>([]);
   const settings = {
-    dots: true,
+     dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 5,
-    slidesToScroll: 1,
+    slidesToScroll: 2,
     rows: 2,
     autoplaySpeed: 2000,
     autoplay: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
   };
   const fetchCategory = () => {
     fetch(`${apiURL}/api/categories`)
