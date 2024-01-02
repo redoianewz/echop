@@ -136,16 +136,10 @@ const Search = () => {
           </span>
         ) : (
           <span className="-top-5 ">
-            <Link href="/sign-in">
-              <button className="submit-button  rounded-md bg-orange-500 text-black focus:ring focus:outline-none  text-lg w-16 mr-2 h-10 ">
-                Sign in
-              </button>
-            </Link>
             <Link href="/sign-up">
-              <button className="submit-button  rounded-md bg-orange-500 text-black focus:ring focus:outline-none  text-lg w-16 mr-2 h-10 ">
-                Login
-              </button>
-            </Link>
+            
+              <FontAwesomeIcon icon={faUser} className="text-4xl text-orange-500" />
+            </Link>            
           </span>
         )}
 
