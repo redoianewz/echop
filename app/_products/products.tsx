@@ -27,12 +27,24 @@ interface Wishlist {
   user_id: number;
   items: any[];
 }
+interface CartItem {
+  product_id: number;
+  item_id: number;
+  // ... other properties of a cart item
+}
+
+interface CartItemData {
+  cart_id: number;
+  items: CartItem[];
+  // ... other properties of cart item data
+}
+
 export default function Products({ slidestoShow }: { slidestoShow: number }) {
   const [products, setProducts] = useState<Product[]>([]);
   const [hoveredProducts, setHoveredProducts] = useState<{
     [key: number]: boolean;
   }>({});
-  const [cart, setCart] = useState<{ cart_id: number; items: any[] }[]>([]);
+  const [cart, setCart] = useState<CartItemData[]>([]);
   const [wishlist, setWishlist] = useState<Wishlist[]>([]);
   const [itemToDelete, setItemToDelete] = useState(null);
      const [uuid, setUuid] = useState("");
@@ -47,32 +59,61 @@ export default function Products({ slidestoShow }: { slidestoShow: number }) {
          localStorage.setItem("deviceUuid", newUuid);
        }
      }, []); 
-  const getShopignCart = () => {
-    // Fetch the cart data and update the state
-    fetch(`${apiURL}/api/shoppingCart/${uuid}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCart(data); // Update the cart state
-      })
-      .catch((error) => {
-        console.error("Error fetching shopping cart:", error);
-      });
-  };
-  const getShopignWishlist = () => {
-    // Fetch the cart data and update the state
-    fetch(`${apiURL}/api/wishlist/${uuid}`)
-      .then((res) => res.json())
-      .then((data) => {
-        setWishlist(data);
-        console.log("wishlist", data); // Update the cart state
-      })
-      .catch((error) => {
-        console.error("Error fetching shopping cart:", error);
-      });
-  };
-  useEffect(() => {
+const getShopignCart = () => {
+  console.log("this url api:", `${apiURL}/api/shoppingCart/${uuid}`);
+  fetch(`${apiURL}/api/shoppingCart/${uuid}`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+      return res.json() as Promise<CartItemData[]>;
+    })
+    .then((data) => {
+      const hasNullItem = data.some((cartItem) =>
+        cartItem.items.some((item) => item.product_id === null)
+      );
+
+      if (hasNullItem) {
+        setCart([]);
+      } else {
+        setCart(data);
+        console.log("ttttttttttttttttttttdis data", data); 
+      }
+    })
+    .catch((error) => {
+      console.error("Error fetching shopping cart:", error);
+    });
+};
+
+   useEffect(() => {
     getShopignCart();
   }, [uuid]);
+  const getShopignWishlist = () => {
+    console.log("this url api:", `${apiURL}/api/wishlist/${uuid}`);
+    fetch(`${apiURL}/api/shoppingCart/${uuid}`)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json() as Promise<Wishlist[]>;
+      })
+      .then((data) => {
+        const hasNullItem = data.some((cartItem) =>
+          cartItem.items.some((item) => item.product_id === null)
+        );
+
+        if (hasNullItem) {
+          setWishlist([]);
+        } else {
+          setWishlist(data);
+          console.log("ttttttttttttttttttttdis data", data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching shopping cart:", error);
+      });
+  };
+ 
   useEffect(() => {
     getShopignWishlist();
   }, [uuid]);
@@ -302,66 +343,96 @@ export default function Products({ slidestoShow }: { slidestoShow: number }) {
                   </ul>
                 </div>
                 <div className="text-end">
-                  {wishlist.map((wishlistItem) => {
-                    const isInWishlist = wishlistItem.items.some(
-                      (item) => item.product_id === product.id
-                    );
+                  {wishlist && wishlist.length > 0 ? (
+                    wishlist.map((wishlistItem) => {
+                      const isInWishlist = wishlistItem.items.some(
+                        (item) => item.product_id === product.id
+                      );
 
-                    return isInWishlist ? (
-                      <FontAwesomeIcon
-                        style={{ cursor: "pointer" }}
-                        onClick={() =>
-                          deleteProductFromWishlist(
-                            wishlistItem.items.map((item) => item.item_id)
-                          )
-                        }
-                        title="Remove from wishlist"
-                        icon={faHeart}
-                        className="text-black mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
-                      />
-                    ) : (
-                      <Link href="#" key={wishlistItem.wishlist_id}>
+                      return isInWishlist ? (
                         <FontAwesomeIcon
-                          onClick={() =>
-                            addProductToWishlist(product.id, product.sale_price)
-                          }
                           style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            deleteProductFromWishlist(
+                              wishlistItem.items.map((item) => item.item_id)
+                            )
+                          }
+                          title="Remove from wishlist"
                           icon={faHeart}
-                          className="text-orange-500 mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                          className="text-black mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
                         />
-                      </Link>
-                    );
-                  })}
-                  {cart.map((cartItem) => {
-                    const isInCart = cartItem.items.some(
-                      (item) => item.product_id === product.id
-                    );
-
-                    return isInCart ? (
+                      ) : (
+                        <Link href="/wishlist" key={wishlistItem.wishlist_id}>
+                          <FontAwesomeIcon
+                            onClick={() =>
+                              addProductToWishlist(
+                                product.id,
+                                product.sale_price
+                              )
+                            }
+                            style={{ cursor: "pointer" }}
+                            icon={faHeart}
+                            className="text-orange-500 mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                          />
+                        </Link>
+                      );
+                    })
+                  ) : (
+                    <Link href="/wishlist">
                       <FontAwesomeIcon
-                        style={{ cursor: "pointer" }}
                         onClick={() =>
-                          deleteProductFromCart(
-                            cartItem.items.map((item) => item.item_id)
-                          )
+                          addProductToWishlist(product.id, product.sale_price)
                         }
-                        title="Remove from cart"
-                        icon={faCartShopping}
-                        className="text-black mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                        style={{ cursor: "pointer" }}
+                        icon={faHeart}
+                        className="text-orange-500 mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
                       />
-                    ) : (
-                      <Link href="/cart" key={cartItem.cart_id}>
+                    </Link>
+                  )}
+
+                  {cart && cart.length > 0 ? (
+                    cart.map((cartItem) => {
+                      const isInCart = cartItem.items.some(
+                        (item) => item.product_id === product.id
+                      );
+
+                      return isInCart ? (
                         <FontAwesomeIcon
-                          onClick={() =>
-                            addProductToCart(product.id, product.sale_price)
-                          }
                           style={{ cursor: "pointer" }}
+                          onClick={() =>
+                            deleteProductFromCart(
+                              cartItem.items.map((item) => item.item_id)
+                            )
+                          }
+                          title="Remove from cart"
                           icon={faCartShopping}
-                          className="text-orange-500 mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                          className="text-black mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
                         />
-                      </Link>
-                    );
-                  })}
+                      ) : (
+                        <Link href="/cart" key={cartItem.cart_id}>
+                          <FontAwesomeIcon
+                            onClick={() =>
+                              addProductToCart(product.id, product.sale_price)
+                            }
+                            style={{ cursor: "pointer" }}
+                            icon={faCartShopping}
+                            className="text-orange-500 mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                          />
+                        </Link>
+                      );
+                    })
+                  ) : (
+                    <Link href="/cart">
+                      <FontAwesomeIcon
+                        onClick={() =>
+                          addProductToCart(product.id, product.sale_price)
+                        }
+                        style={{ cursor: "pointer" }}
+                        icon={faCartShopping}
+                        className="text-orange-500 mr-1  border text-end bg-green-100 text-lg border-green-400 rounded-full p-2"
+                      />
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

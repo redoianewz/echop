@@ -39,9 +39,13 @@ const Search = () => {
      }, []); 
 
    const getShopignCart = () => {
-     // Fetch the cart data and update the state
      fetch(`${apiURL}/api/shoppingCart/${uuid}`)
-       .then((res) => res.json())
+       .then((res) => {
+         if (!res.ok) {
+           throw new Error(`HTTP error! Status: ${res.status}`);
+         }
+         return res.json();
+       })
        .then((data: cartItem[]) => {
          // تحديد نوع البيانات للمتغير cartItem
          const hasNullItem = data.some((cartItem) =>
@@ -57,26 +61,31 @@ const Search = () => {
        .catch((error) => {
          console.error("Error fetching shopping cart:", error);
        });
-   };
+   }; 
    const getShopignWishlist = () => {
      // Fetch the cart data and update the state
-     fetch(`${apiURL}/api/wishlist/${uuid}`)
-       .then((res) => res.json())
-       .then((data: WishlistItem[]) => {
-         // تحديد نوع البيانات للمتغير cartItem
-         const hasNullItem = data.some((cartItem) =>
-           cartItem.items.some((item) => item.item_id === null)
-         );
+   fetch(`${apiURL}/api/wishlist/${uuid}`)
+     .then((res) => {
+       if (!res.ok) {
+         throw new Error(`HTTP error! Status: ${res.status}`);
+       }
+       return res.json();
+     })
+     .then((data: WishlistItem[]) => {
+       // تحديد نوع البيانات للمتغير cartItem
+       const hasNullItem = data.some((cartItem) =>
+         cartItem.items.some((item) => item.item_id === null)
+       );
 
-         if (hasNullItem) {
-           setWishlist([]);
-         } else {
-           setWishlist(data);
-         }
-       })
-       .catch((error) => {
-         console.error("Error fetching shopping cart:", error);
-       });
+       if (hasNullItem) {
+         setWishlist([]);
+       } else {
+         setWishlist(data);
+       }
+     })
+     .catch((error) => {
+       console.error("Error fetching shopping cart:", error);
+     });
    };
    useEffect(() => {
      getShopignCart();

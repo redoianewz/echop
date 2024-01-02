@@ -34,7 +34,7 @@ export default function Page() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<ItemToDelete | null>(null);
   const [subtotal, setSubtotal] = useState(0);
-   const [uuid, setUuid] = useState("");
+  const [uuid, setUuid] = useState("");
 
    useEffect(() => {
      const storedUuid = localStorage.getItem("deviceUuid");
@@ -46,8 +46,9 @@ export default function Page() {
        localStorage.setItem("deviceUuid", newUuid);
      }
    }, []); 
-
+   console.log("uuid",uuid)
   const getShopignCart = () => {
+    console.log("this url api:",`${apiURL}/api/shoppingCart/${uuid}`);
     fetch(`${apiURL}/api/shoppingCart/${uuid}`)
       .then((res) => {
         if (!res.ok) {
@@ -70,16 +71,21 @@ export default function Page() {
       .catch((error) => {
         console.error("Error fetching shopping cart:", error);
       });
-  };
+  }; 
+   useEffect(() => {
+    getShopignCart();
+  }, [uuid]);
+  console.log("this url api2:",`${apiURL}/api/shoppingCart/${uuid}`)
+
+
+
   const showMessage = (message: string) => {
     setDeleteMessage(message);
     setTimeout(() => {
       setDeleteMessage("");
     }, 3000);
   };
-  useEffect(() => {
-    getShopignCart();
-  }, [uuid]);
+
 
   const updateQuantity = (itemId: number | null, newQuantity: number) => {
     if (itemId !== null) {

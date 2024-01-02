@@ -70,6 +70,7 @@ export default function page({ params: { productId } }: any) {
       });
   };
 
+
   useEffect(() => {
     console.log("Product ID:", productId);
     if (productId) {
@@ -86,8 +87,9 @@ export default function page({ params: { productId } }: any) {
   }, [product.image]);
 
 const handleAddToCart = () => {
+  // Prepare the request body
   const requestBody = {
-    uuid: uuid, // Correct the variable name to match the server-side code
+    uuid: uuid,
     productId: product.id,
     quantity: quantity,
     price: product.sale_price,
@@ -98,22 +100,28 @@ const handleAddToCart = () => {
     ],
   };
 
-  fetch(`${apiURL}/api/shoppingCart`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(requestBody),
-    credentials: "include",
+console.log("Request Body:", requestBody);
+
+fetch(`${apiURL}/api/shoppingCart`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(requestBody),
+})
+  .then((res) => {
+    console.log("Response Status:", res.status);
+    return res.json();
   })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log("Add to cart:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
-};
+  .then((data) => {
+    console.log("Success Response:", data);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  }
+  );
+}
+
 
 
   const handleAddToWishlist = () => {
@@ -135,11 +143,10 @@ const handleAddToCart = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(requestBody),
-      credentials: "include",
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Add to cart:", data);
+        console.log("Add to wishlist:", data);
       })
       .catch((error) => {
         console.error("Error:", error);
