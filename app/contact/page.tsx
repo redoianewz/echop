@@ -359,12 +359,12 @@ export default function page() {
         </main>
       </div>
       <section className="text-gray-600 body-font relative">
-        <div className="absolute inset-0 bg-gray-300">
+        <div className="absolute inset-0 bg-gray-300">          
           <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3419105.406698964!2d-7.0151353215705345!3d33.18865450891454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda7d29ce1f4c311%3A0x1143d4a6af00527e!2z2K_YsdioINi52YXYsdiMINin2YTYr9in2LEg2KfZhNio2YrYttin2KE!5e0!3m2!1sar!2sma!4v1704206899559!5m2!1sar!2sma"
             width="100%"
             height="100%"
-            title="map"
-            src="https://maps.google.com/maps?width=100%&height=600&hl=en&q=%C4%B0zmir+(My%20Business%20Name)&ie=UTF8&t=&z=14&iwloc=B&output=embed"
+            className='border-rounded'            
           ></iframe>
         </div>
         <div className="container px-5 py-24 mx-auto flex">
@@ -425,7 +425,7 @@ export default function page() {
             </div>
           </div>
         </div>
-      </section>     
+      </section>
     </div>
   );
 }
