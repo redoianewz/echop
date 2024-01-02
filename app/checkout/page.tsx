@@ -99,7 +99,7 @@ export default function Checkout() {
       address: formData.address || "",
       adinformation: formData.additionalInfo || "",
       city: formData.city || "",
-      status: "pending",
+      status: "ordered",
       items: cart.flatMap((cartItem) =>
         cartItem.items.map((item) => ({
           productId: item.product_id,
