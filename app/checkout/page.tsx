@@ -110,7 +110,7 @@ export default function Checkout() {
       ),
     };
 
-    fetch(`${apiURL}/api/checkout/${uuid}`, {
+    fetch(`${apiURL}/api/checkout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
