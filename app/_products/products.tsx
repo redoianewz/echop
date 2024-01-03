@@ -120,7 +120,7 @@ const getShopignCart = () => {
     infinite: true,
     speed: 500,
     slidesToShow: slidestoShow,
-    slidesToScroll: 2,
+    slidesToScroll: 1,
     rows: 2,
     autoplaySpeed: 2000,
     autoplay: true,
@@ -138,7 +138,6 @@ const getShopignCart = () => {
 
   // Use window.innerWidth to determine the screen width
 
-  const isMobile = window.innerWidth < 768;
 
 
   const fetchProducts = () => {
@@ -163,9 +162,12 @@ const getShopignCart = () => {
     }));
   };
 
-  useEffect(() => {
+ const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+useEffect(() => {
+  if (typeof window !== "undefined") {
     fetchProducts();
-  }, []);
+  }
+}, []);
 
   const addProductToCart = (productId: number, price: number) => {
     const requestBody = {
@@ -275,9 +277,7 @@ const getShopignCart = () => {
 
   return (
     <div className="my-8">
-      <Slider
-        className={isMobile ? "my-8" : ""}        
-      >
+      <Slider {...(isMobile ? mobileSettings : settings)}>
         {products.map((product, index) => (
           <div
             key={index}
@@ -285,23 +285,31 @@ const getShopignCart = () => {
             onMouseLeave={() => handleProductLeave(product.id)}
             className="mt-2"
           >
-            <div className="block bg-white p-4 rounded-md transition duration-300 hover:shadow-lg focus:outline-none w-56">
+            <div
+              className={`block bg-white p-2 rounded-md transition duration-300 hover:shadow-lg focus:outline-none w-56 ${
+                isMobile ? "w-[150px]" : ""
+              }`}
+            >
               <Link href={`/product/${product.id}`}>
                 <div className="aspect-h-3 h-40 overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 relative">
                   <p className="absolute -top-1 -left-1 bg-orange-500 text-white px-2 py-1 rounded-md">
                     New
                   </p>
-
-                  <img
-                    src={
-                      hoveredProducts[product.id]
-                        ? `${apiURL}/images/products/${product.image}`
-                        : `${apiURL}/images/products/${product.images}`
-                    }
-                    width={180}
-                    height={240}
-                    alt={product.name}
-                  />
+                  {isMobile ? (
+                    <img
+                      src={`${apiURL}/images/products/${product.images}`}
+                      width={180}
+                      height={240}
+                      alt={product.name}
+                    />
+                  ) : (
+                    <img
+                      src={`${apiURL}/images/products/${product.image}`}
+                      width={180}
+                      height={240}
+                      alt={product.name}
+                    />
+                  )}
                 </div>
               </Link>
               <div className="mt-2">

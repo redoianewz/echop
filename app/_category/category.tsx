@@ -70,6 +70,16 @@ export default function Category() {
     autoplaySpeed: 2000,
     autoplay: true,
   };
+    const mobileSettings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 3,
+      slidesToScroll: 2,
+      rows: 2,
+      autoplaySpeed: 2000,
+      autoplay: true,
+    };
   const fetchCategory = () => {
     fetch(`${apiURL}/api/categories`)
       .then((res) => res.json())
@@ -77,13 +87,16 @@ export default function Category() {
         setCategory(data);
       });
   };
+ const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   useEffect(() => {
+    if (typeof window !== "undefined") {
     fetchCategory();
+    }
   }, []);
 
   return (
     <div className="my-8">
-      <Slider {...settings}>
+      <Slider {...(isMobile ? mobileSettings : settings)}>
         {category.map((category, index) => (
           <div key={index} className="px-2 mt-2">
             <Link
