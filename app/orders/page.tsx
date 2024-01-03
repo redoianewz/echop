@@ -83,10 +83,10 @@ export default function OrdersPage() {
       {orders.length > 0 ? (
         orders.map((item) => (
           <div key={item.orderId}>
-            <div className="flex items-center justify-center">
-              <div className="col-span-12">
-                <div className="overflow-auto lg:overflow-visible">
-                  <table className="table text-gray-400 border-separate space-y-6 text-sm">
+            <div className="col-span-12">
+              <div className="overflow-auto lg:overflow-visible">
+                <div className="table-container">
+                  <table className="table text-gray-400 border-separate space-y-6 text-sm w-full">
                     <thead className="bg-blue-500 text-white">
                       <tr>
                         <th className="p-3">#OrderId</th>
@@ -160,22 +160,26 @@ export default function OrdersPage() {
                       </div>
                     </div>
 
-                    <div className="flex justify-center text-gray-800 dark:text-gray-800 md:justify-start items-center space-x-4 py-4 border-b border-gray-200 w-full">
-                      <p className="cursor-pointer text-xl leading-5 text-orange-500">
-                        <FontAwesomeIcon icon={faEnvelope} />
+                    <div className="block justify-center text-gray-800 dark:text-gray-800 md:justify-start items-center space-x-4 py-4 border-b border-gray-200 w-full">
+                      <p className="flex justify-start">
+                        <span className="cursor-pointer text-xl leading-5 text-orange-500">
+                          <FontAwesomeIcon icon={faEnvelope} />
+                        </span>
+                        <span className="cursor-pointer text-sm leading-5 ">
+                          {user?.emailAddresses.map((emailAddress) => (
+                            <div key={emailAddress.id}>
+                              {emailAddress.emailAddress}
+                            </div>
+                          ))}
+                        </span>
                       </p>
-                      <p className="cursor-pointer text-sm leading-5 ">
-                        {user?.emailAddresses.map((emailAddress) => (
-                          <div key={emailAddress.id}>
-                            {emailAddress.emailAddress}
-                          </div>
-                        ))}
-                      </p>
-                      <p className="cursor-pointer text-xl leading-5 text-orange-500">
-                        <FontAwesomeIcon icon={faMobileScreenButton} />{" "}
-                      </p>
-                      <p className="cursor-pointer text-sm leading-5 ">
-                        {item.client.mobile}
+                      <p className="flex justify-start">
+                        <span className="cursor-pointer text-xl leading-5 text-orange-500">
+                          <FontAwesomeIcon icon={faMobileScreenButton} />
+                        </span>
+                        <span className="cursor-pointer text-sm leading-5 ">
+                          {item.client.mobile}
+                        </span>{" "}
                       </p>
                     </div>
                   </div>

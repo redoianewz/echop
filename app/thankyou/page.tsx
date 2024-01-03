@@ -11,7 +11,6 @@ export default function Page() {
         <div className="flex flex-col items-center p-4 space-y-2 bg-white">
           <div className="flex items-center">
             <img src="/images/slider/attachment.jpg" alt="attachment" />
-            <h1 className="text-[200px] h-[400px] font-bold font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-black  to-purple-900 ml-4">!</h1>
           </div>
           <p 
             className="text-xl font-semibold  text-gray-800"           

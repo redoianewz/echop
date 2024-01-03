@@ -233,22 +233,26 @@ export default function OrdersPage({
                   </div>
                 </div>
 
-                <div className="flex justify-center text-gray-800 dark:text-gray-800 md:justify-start items-center space-x-4 py-4 border-b border-gray-200 w-full">
-                  <p className="cursor-pointer text-xl leading-5 text-orange-500">
-                    <FontAwesomeIcon icon={faEnvelope} />
+                <div className="block justify-center text-gray-800 dark:text-gray-800 md:justify-start items-center space-x-4 py-4 border-b border-gray-200 w-full">
+                  <p className="flex justify-start">
+                    <span className="cursor-pointer text-xl leading-5 text-orange-500">
+                      <FontAwesomeIcon icon={faEnvelope} />
+                    </span>
+                    <span className="cursor-pointer text-sm leading-5 ">
+                      {user?.emailAddresses.map((emailAddress) => (
+                        <div key={emailAddress.id}>
+                          {emailAddress.emailAddress}
+                        </div>
+                      ))}
+                    </span>
                   </p>
-                  <p className="cursor-pointer text-sm leading-5 ">
-                    {user?.emailAddresses.map((emailAddress) => (
-                      <div key={emailAddress.id}>
-                        {emailAddress.emailAddress}
-                      </div>
-                    ))}
-                  </p>
-                  <p className="cursor-pointer text-xl leading-5 text-orange-500">
-                    <FontAwesomeIcon icon={faMobileScreenButton} />{" "}
-                  </p>
-                  <p className="cursor-pointer text-sm leading-5 ">
-                    {orders.mobile}
+                  <p className="flex justify-start">
+                    <span className="cursor-pointer text-xl leading-5 text-orange-500">
+                      <FontAwesomeIcon icon={faMobileScreenButton} />
+                    </span>
+                    <span className="cursor-pointer text-sm leading-5 ">
+                      {orders.mobile}                      
+                    </span>
                   </p>
                 </div>
               </div>
