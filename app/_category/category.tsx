@@ -7,52 +7,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 // Define NextArrow outside of the Category component
-function NextArrow(props: any) {
-  const { className, onClick } = props;
-  return (
-    <div className={className} onClick={onClick}>
-      {/* Use your preferred arrow icon or styling */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        className="h-6 w-6 text-gray-700"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M9 5l7 7-7 7"
-        />
-      </svg>
-    </div>
-  );
-}
 
-// Define PrevArrow outside of the Category component
-function PrevArrow(props: any) {
-  const { className, onClick } = props;
-  return (
-    <div className={className} onClick={onClick}>
-      {/* Use your preferred arrow icon or styling */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        className="h-6 w-6 text-gray-700"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M15 19l-7-7 7-7"
-        />
-      </svg>
-    </div>
-  );
-}
 interface Category {
   id: number;
   name: string;
@@ -87,7 +42,7 @@ export default function Category() {
         setCategory(data);
       });
   };
- const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+const isMobile =  typeof window !== "undefined" && window.innerWidth < 768;
   useEffect(() => {
     if (typeof window !== "undefined") {
     fetchCategory();
