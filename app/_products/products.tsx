@@ -276,8 +276,7 @@ const getShopignCart = () => {
   return (
     <div className="my-8">
       <Slider
-        className={isMobile ? "my-8" : ""}
-        style={isMobile ? { fontSize: "8rem" } : {}}
+        className={isMobile ? "my-8" : ""}        
       >
         {products.map((product, index) => (
           <div
