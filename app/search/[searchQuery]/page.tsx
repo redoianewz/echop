@@ -87,16 +87,8 @@ export default function SearchResults({
     fetch(`${apiURL}/api/search/${searchQuery}`)
       .then((res) => res.json())
       .then((data) => {
-        setSearchResults(data.result);
-        // Initialize hover state for each product
-        const initialHoverState = data.result.reduce(
-          (acc: any, product: any) => {
-            acc[product.id] = false;
-            return acc;
-          },
-          {}
-        );
-        setHoveredProducts(initialHoverState);
+        setSearchResults(data);
+        console.log("search", data);                
       })
       .catch((error) => {
         console.error("Error fetching search results:", error);

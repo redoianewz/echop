@@ -19,6 +19,7 @@
     "@next/font": "^14.0.3",
     "@popperjs/core": "^2.11.8",
     "@react-hooks-library/core": "^0.5.1",
+    "classnames": "^2.5.1",
     "js-cookie": "^3.0.5",
     "next": "^14.0.4",
     "react": "^18.2.0",
