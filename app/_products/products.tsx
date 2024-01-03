@@ -89,7 +89,7 @@ const getShopignCart = () => {
     getShopignCart();
   }, [uuid]);
   const getShopignWishlist = () => {  
-    fetch(`${apiURL}/api/shoppingCart/${uuid}`)
+    fetch(`${apiURL}/api/wishlist/${uuid}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! Status: ${res.status}`);
@@ -137,7 +137,9 @@ const getShopignCart = () => {
   };
 
   // Use window.innerWidth to determine the screen width
-  const isMobile = window.innerWidth < 740;
+
+  const isMobile = window.innerWidth < 768;
+
 
   const fetchProducts = () => {
     fetch(`${apiURL}/api/products`)
@@ -273,7 +275,7 @@ const getShopignCart = () => {
 
   return (
     <div className="my-8">
-      <Slider {...(isMobile ? mobileSettings : settings)}>
+      <Slider {...(isMobile ? mobileSettings : settings)}>        
         {products.map((product, index) => (
           <div
             key={index}
