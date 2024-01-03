@@ -109,7 +109,7 @@ const Search = () => {
           <input
             type="text"
             placeholder="Search..."
-            className="border border-gray-300 rounded-full  focus:outline-none focus:border-orange-700 lg:w-[500px] xl:w-64 px-6 py-2"
+            className="border border-gray-300 rounded-full focus:outline-none focus:border-orange-700 lg:w-[500px] xl:w-64 px-6 py-2 text-sm" // Apply text-sm class here
             value={searchQuery}
             onChange={handleSearchChange}
           />
@@ -137,9 +137,11 @@ const Search = () => {
         ) : (
           <span className="-top-5 ">
             <Link href="/sign-up">
-            
-              <FontAwesomeIcon icon={faUser} className="text-4xl text-orange-500" />
-            </Link>            
+              <FontAwesomeIcon
+                icon={faUser}
+                className="text-4xl text-orange-500"
+              />
+            </Link>
           </span>
         )}
 
