@@ -72,16 +72,27 @@ export default function SearchResults({
          localStorage.setItem("deviceUuid", newUuid);
        }
      }, []); 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 2,
-    rows: 1,
-    autoplaySpeed: 2000,
-    autoplay: true,
-  };
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 4,
+      slidesToScroll: 1,
+      rows: 2,
+      autoplaySpeed: 2000,
+      autoplay: true,
+    };
+    const mobileSettings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 2,
+      slidesToScroll: 2,
+      rows: 2,
+      autoplaySpeed: 2000,
+      autoplay: true,
+    };
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
   const fetchData = () => {
     // Fetch data based on searchQuery
     fetch(`${apiURL}/api/search/${searchQuery}`)
@@ -96,7 +107,9 @@ export default function SearchResults({
   };
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
     fetchData();
+    }
   }, [searchQuery]);
   const getShopignCart = () => {
     // Fetch the cart data and update the state
@@ -257,7 +270,7 @@ export default function SearchResults({
         <CategoryFilter />
         <div className=" col-span-full lg:col-span-3 w-full max-w-9xl">
           <div className="my-8">
-            <Slider {...settings}>
+            <Slider {...(isMobile ? mobileSettings : settings)}>
               {searchResults.map((product, index) => (
                 <div
                   key={index}
