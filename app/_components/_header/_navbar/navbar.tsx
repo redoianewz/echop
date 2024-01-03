@@ -55,11 +55,10 @@ function Navbar() {
      const query = e.target.value;
      setSearchQuery(query);
    };
-  return (
-    <div  className="flex">
-      <Disclosure as="nav" className="text-black p-2 lg:flex">
-        {({ open }) => (
-          <>
+  return (    
+    <Disclosure as="nav" className="text-black p-2 lg:flex">
+      {({ open }) => (
+        <>       
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
                 <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -73,7 +72,7 @@ function Navbar() {
                     />
                   </Disclosure.Button>
                 </div>
-                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start ml-10">
+                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
                     <Menu as="div" className="relative ml-3">
                       <div>
@@ -178,55 +177,10 @@ function Navbar() {
                   </a>
                 ))}
               </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-      <Disclosure as="nav" className="text-black p-2 lg:flex">
-        {({ open }) => (
-          <>
-            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-              <div className="relative flex h-16 items-center justify-between">
-                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="absolute -inset-0.5" />
-                    <span className="sr-only">Open main menu</span>
-                    <FontAwesomeIcon
-                      icon={open ? faTimes : faSearch}
-                      className="block h-6 w-6"
-                      aria-hidden="true"
-                    />
-                  </Disclosure.Button>
-                </div>
-              </div>
-            </div>
-            <Disclosure.Panel className="sm:hidden">
-              <div className="flex items-center space-x-2">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    className="border border-gray-300 rounded-full focus:outline-none focus:border-orange-700 lg:w-[500px] xl:w-64 px-6 py-2 text-sm "
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                  />
-                  <span className="absolute right-2 top-2 text-gray-500">
-                    <Link href={`/search/${searchQuery}`}>
-                      <button>
-                        <FontAwesomeIcon
-                          icon={faSearch}
-                          className="text-2xl text-orange-500"
-                        />
-                      </button>
-                    </Link>
-                  </span>
-                </div>
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
-    </div>
+            </Disclosure.Panel>                
+        </>
+      )}
+    </Disclosure>
   );
 }
 
