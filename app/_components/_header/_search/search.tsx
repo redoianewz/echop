@@ -105,11 +105,13 @@ const Search = () => {
         <span className="text-xl font-bold text-black">Logo</span>
       </div>
       <div className="flex items-center space-x-2">
-        <div className="relative">
+        <div className="relative lg:block hidden">
+          {" "}
+          {/* Hide on mobile, show on lg screens and above */}
           <input
             type="text"
             placeholder="Search..."
-            className="border border-gray-300 rounded-full focus:outline-none focus:border-orange-700 lg:w-[500px] xl:w-64 px-6 py-2 text-sm" // Apply text-sm class here
+            className="border border-gray-300 rounded-full focus:outline-none focus:border-orange-700 lg:w-[500px] xl:w-64 px-6 py-2 text-sm"
             value={searchQuery}
             onChange={handleSearchChange}
           />
