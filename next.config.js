@@ -1,7 +1,7 @@
 // next.config.js
 const nextConfig = {
   images: {
-    domains: ["myconnect-backend.herokuapp.com"],
+    domains: ["https://bachen-eco.onrender.com"],
   },
 };
 
