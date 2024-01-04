@@ -285,7 +285,7 @@ export default function SearchResults({
                           New
                         </p>
 
-                        <Image
+                        <img
                           src={
                             hoveredProducts[product.id]
                               ? `${apiURL}/images/products/${product.image}`

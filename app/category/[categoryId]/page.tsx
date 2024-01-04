@@ -100,7 +100,7 @@ export default function page({
                       <p className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded-md">
                         New
                       </p>
-                      <Image
+                      <img
                         src={
                           hoveredProducts[product.id]
                             ? `${apiURL}/images/products/${product.image} `
