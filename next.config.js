@@ -1,7 +1,7 @@
 // next.config.js
 const nextConfig = {
   images: {
-    domains: ["localhost", "myconnect-backend.herokuapp.com"],
+    domains: ["myconnect-backend.herokuapp.com"],
   },
 };
 
